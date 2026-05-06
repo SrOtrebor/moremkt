@@ -1,0 +1,350 @@
+/* Variables de color y tipografía inspiradas en la imagen */
+:root {
+    /* Fondo: Púrpura oscuro estilo viñeta */
+    --bg-color-center: #4c2c5c;
+    --bg-color-edge: #23122c;
+    
+    /* Acentos y textos */
+    --accent-color: #f6c039; /* Amarillo/Dorado del logo */
+    --accent-hover: #ffda6e;
+    --text-primary: #f8f0fa;
+    --text-secondary: #d3bcdc;
+    
+    /* Tipografías modernas */
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: radial-gradient(circle at center, var(--bg-color-center) 0%, var(--bg-color-edge) 80%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    overflow: hidden;
+    position: relative;
+}
+
+/* Esquinas decorativas al estilo del diseño enviado */
+.corner-decor {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    opacity: 0;
+    animation: fadeInDecor 2.5s 1.5s forwards ease-out;
+    pointer-events: none;
+}
+
+.corner-decor::before, .corner-decor::after {
+    content: '';
+    position: absolute;
+    background-color: rgba(246, 192, 57, 0.4);
+}
+
+/* Esquina superior izquierda */
+.top-left { top: 30px; left: 30px; }
+.top-left::before { top: 0; left: 0; width: 100%; height: 2px; }
+.top-left::after { top: 0; left: 0; width: 2px; height: 100%; }
+
+/* Esquina superior derecha */
+.top-right { top: 30px; right: 30px; }
+.top-right::before { top: 0; right: 0; width: 100%; height: 2px; }
+.top-right::after { top: 0; right: 0; width: 2px; height: 100%; }
+
+/* Esquina inferior izquierda */
+.bottom-left { bottom: 30px; left: 30px; }
+.bottom-left::before { bottom: 0; left: 0; width: 100%; height: 2px; }
+.bottom-left::after { bottom: 0; left: 0; width: 2px; height: 100%; }
+
+/* Esquina inferior derecha */
+.bottom-right { bottom: 30px; right: 30px; }
+.bottom-right::before { bottom: 0; right: 0; width: 100%; height: 2px; }
+.bottom-right::after { bottom: 0; right: 0; width: 2px; height: 100%; }
+
+/* Brillos decorativos de fondo (blur) */
+.glow {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    filter: blur(150px);
+    opacity: 0.05;
+    z-index: 0;
+    animation: pulseGlow 8s infinite alternate;
+}
+
+.glow-1 { top: -100px; left: -100px; }
+.glow-2 { bottom: -100px; right: -100px; animation-delay: 4s; }
+
+/* Contenedor principal */
+.container {
+    text-align: center;
+    z-index: 10;
+    padding: 2rem;
+    max-width: 650px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3.5rem;
+}
+
+/* Animación del Logo */
+.brand-container {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: slideUpFade 1.2s 0.2s forwards cubic-bezier(0.16, 1, 0.3, 1),
+               float 6s 1.5s infinite ease-in-out;
+}
+
+.logo {
+    max-width: 340px;
+    width: 100%;
+    filter: drop-shadow(0px 12px 24px rgba(0,0,0,0.4));
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.4s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05) rotate(-1deg);
+    filter: drop-shadow(0px 15px 30px rgba(246, 192, 57, 0.15));
+}
+
+/* Textos */
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideUpFade 1.2s 0.6s forwards cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.title {
+    font-family: var(--font-heading);
+    font-size: 2.8rem;
+    font-weight: 300;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    margin: 0;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.subtitle {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 85%;
+}
+
+.divider {
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    margin: 1.5rem 0;
+    border-radius: 3px;
+    opacity: 0.8;
+}
+
+/* Contactos */
+.contact {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    width: 100%;
+    max-width: 400px;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideUpFade 1.2s 0.9s forwards cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contact-link {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    text-decoration: none;
+    padding: 1.2rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-link::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(246, 192, 57, 0.1), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+}
+
+.contact-link:hover::before {
+    left: 150%;
+}
+
+.contact-link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(246, 192, 57, 0.3);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), 0 0 15px rgba(246, 192, 57, 0.05);
+    transform: translateY(-5px);
+}
+
+.icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.contact-link:hover .icon-wrapper {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(246, 192, 57, 0.4);
+}
+
+.contact-link i {
+    font-size: 1.8rem;
+    color: var(--accent-color);
+    transition: all 0.3s ease;
+}
+
+.contact-link:hover i {
+    color: #1a0e20;
+    transform: scale(1.1);
+}
+
+.link-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.link-text .label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+    transition: color 0.3s ease;
+}
+
+.link-text .value {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.contact-link:hover .link-text .label {
+    color: var(--accent-hover);
+}
+
+.contact-link:hover .link-text .value {
+    color: #fff;
+}
+
+/* Keyframes */
+@keyframes slideUpFade {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+        filter: blur(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+@keyframes fadeInDecor {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulseGlow {
+    0% {
+        opacity: 0.03;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0.08;
+        transform: scale(1.2);
+    }
+}
+
+/* Media Queries para Responsive */
+@media (max-width: 768px) {
+    .corner-decor {
+        width: 40px;
+        height: 40px;
+    }
+    .top-left { top: 20px; left: 20px; }
+    .top-right { top: 20px; right: 20px; }
+    .bottom-left { bottom: 20px; left: 20px; }
+    .bottom-right { bottom: 20px; right: 20px; }
+    
+    .container {
+        padding: 1.5rem;
+        gap: 2.5rem;
+    }
+    .title {
+        font-size: 2.2rem;
+    }
+    .logo {
+        max-width: 260px;
+    }
+    .contact-link {
+        padding: 1rem 1.2rem;
+    }
+}
+
+@media (max-height: 700px) {
+    .container {
+        gap: 2rem;
+    }
+    .logo {
+        max-width: 240px;
+    }
+    .title {
+        font-size: 2rem;
+    }
+}
