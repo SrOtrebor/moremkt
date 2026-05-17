@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoreMKT | Generador de Firmas de Email</title>
+    <!-- Favicon -->
+    <link rel="icon" href="SVG/iso.svg" type="image/svg+xml">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        :root {
+            --bg-center: #23122c;
+            --bg-edge: #0e0513;
+            --accent-gold: #f6c039;
+            --accent-orange: #e07b2a;
+            --text-main: #f8f0fa;
+            --text-mute: #bcaec2;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.06);
+            --input-focus: rgba(246, 192, 57, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: radial-gradient(circle at center, var(--bg-center) 0%, var(--bg-edge) 100%);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        header .logo-container {
+            margin-bottom: 1rem;
+        }
+
+        header img {
+            max-width: 180px;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+        }
+
+        header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-size: 1.8rem;
+            color: var(--accent-gold);
+            margin-top: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-mute);
+            font-size: 0.95rem;
+            font-weight: 300;
+            margin-top: 0.3rem;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Glassmorphic Panel */
+        .panel {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .panel-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-mute);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 10px var(--input-focus);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .row-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Aesthetics Selector */
+        .theme-selector {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .theme-option {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            background: rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .theme-option.active {
+            border-color: var(--accent-gold);
+            background: rgba(246, 192, 57, 0.08);
+            box-shadow: 0 0 15px rgba(246, 192, 57, 0.1);
+        }
+
+        .theme-option.theme-carbon.active {
+            border-color: var(--accent-orange);
+            background: rgba(224, 123, 42, 0.08);
+            box-shadow: 0 0 15px rgba(224, 123, 42, 0.1);
+        }
+
+        .theme-option .circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-option.theme-violet .circle { background: linear-gradient(135deg, #4c2c5c, #f6c039); }
+        .theme-option.theme-carbon .circle { background: linear-gradient(135deg, #1a1a1a, #e07b2a); }
+
+        .theme-option span {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Right Panel: Preview Area */
+        .preview-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .preview-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 2.5rem;
+            min-height: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.3s ease, border-color 0.3s ease;
+            overflow: auto;
+        }
+
+        .preview-box.dark-mode {
+            background: #151515;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .preview-badge {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #777777;
+            background: rgba(0,0,0,0.05);
+            padding: 2px 8px;
+            border-radius: 6px;
+            pointer-events: none;
+        }
+
+        .preview-box.dark-mode .preview-badge {
+            background: rgba(255,255,255,0.05);
+            color: #aaaaaa;
+        }
+
+        .preview-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-toggle {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-copy {
+            background: var(--accent-gold);
+            border: none;
+            color: #1a0e20;
+            padding: 0.9rem 1.8rem;
+            border-radius: 14px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 20px rgba(246, 192, 57, 0.2);
+            width: 100%;
+        }
+
+        .btn-copy:hover {
+            background: #fff;
+            box-shadow: 0 12px 25px rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .btn-copy.carbon-active {
+            background: var(--accent-orange);
+            color: #fff;
+            box-shadow: 0 10px 20px rgba(224, 123, 42, 0.2);
+        }
+
+        .btn-copy.carbon-active:hover {
+            background: #fff;
+            color: #1a1a1a;
+        }
+
+        .btn-copy-secondary {
+            background: rgba(255, 255, 255, 0.04) !important;
+            border: 1px solid var(--card-border) !important;
+            color: var(--text-main) !important;
+            box-shadow: none !important;
+            margin-top: 0.5rem;
+        }
+
+        .btn-copy-secondary:hover {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border-color: var(--accent-gold) !important;
+            color: #fff !important;
+            transform: translateY(-3px);
+        }
+
+        .btn-copy-secondary.carbon-active:hover {
+            border-color: var(--accent-orange) !important;
+        }
+
+        /* Instructions Accordion */
+        .instructions {
+            grid-column: 1 / -1;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .instructions h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            color: var(--accent-gold);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.75rem;
+        }
+
+        .guide-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .guide-card {
+            background: rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .guide-card:hover {
+            border-color: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        .guide-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .guide-card h3 i {
+            color: var(--accent-gold);
+        }
+
+        .guide-card.carbon-theme h3 i {
+            color: var(--accent-orange);
+        }
+
+        .guide-card ol {
+            padding-left: 1.2rem;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--text-mute);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .guide-card ol li strong {
+            color: #fff;
+        }
+
+        /* Tips Alert */
+        .tips-container {
+            margin-top: 1.5rem;
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
+            background: rgba(246, 192, 57, 0.05);
+            border-left: 4px solid var(--accent-gold);
+            display: flex;
+            gap: 0.8rem;
+            align-items: flex-start;
+            font-size: 0.85rem;
+            color: var(--text-mute);
+            line-height: 1.5;
+        }
+
+        .tips-container.carbon-theme {
+            background: rgba(224, 123, 42, 0.05);
+            border-left-color: var(--accent-orange);
+        }
+
+        .tips-container i {
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            margin-top: 2px;
+        }
+
+        .tips-container.carbon-theme i {
+            color: var(--accent-orange);
+        }
+
+        .tips-container p strong {
+            color: #fff;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); filter: blur(5px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        @media (max-width: 900px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            .guide-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="SVG/logo-full.svg" alt="MoreMKT Logo" id="brand-header-logo">
+        </div>
+        <h1>Generador de Firmas de Email</h1>
+        <p>Crea una firma corporativa moderna alineada a la identidad visual de la marca</p>
+    </header>
+
+    <div class="main-container">
+        <!-- Control Panel (Left Side) -->
+        <div class="panel">
+            <div class="panel-title">
+                <i class="ph ph-sliders"></i> Personaliza tus Datos
+            </div>
+
+            <div class="form-group">
+                <label for="input-name">Nombre y Apellido</label>
+                <input type="text" id="input-name" value="Roberto Laforcada" placeholder="Ej: Roberto Laforcada">
+            </div>
+
+            <div class="form-group">
+                <label for="input-title">Cargo / Posición</label>
+                <input type="text" id="input-title" value="Paid Media & Performance Specialist" placeholder="Ej: Paid Media Specialist">
+            </div>
+
+            <div class="row-grid">
+                <div class="form-group">
+                    <label for="input-whatsapp">WhatsApp / Celular</label>
+                    <input type="text" id="input-whatsapp" value="11 7642-6155" placeholder="Ej: 11 7642-6155">
+                </div>
+                <div class="form-group">
+                    <label for="input-email">Correo Electrónico</label>
+                    <input type="email" id="input-email" value="hola@morehdmkt.com" placeholder="Ej: hola@morehdmkt.com">
+                </div>
+            </div>
+
+            <div class="row-grid">
+                <div class="form-group">
+                    <label for="input-web">Sitio Web</label>
+                    <input type="text" id="input-web" value="morehdmkt.com" placeholder="Ej: morehdmkt.com">
+                </div>
+                <div class="form-group">
+                    <label for="input-logo-url">URL de Logo Personalizado (Opcional)</label>
+                    <input type="text" id="input-logo-url" placeholder="Vacío para usar predeterminado" title="Si hospedas tu logo PNG en internet, pega el link directo aquí (.png)">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Estilo / Estética de Marca</label>
+                <div class="theme-selector">
+                    <div class="theme-option theme-violet active" onclick="switchTheme('violet')">
+                        <div class="circle"></div>
+                        <span>Violeta & Oro</span>
+                    </div>
+                    <div class="theme-option theme-carbon" onclick="switchTheme('carbon')">
+                        <div class="circle"></div>
+                        <span>Carbón & Naranja</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview Area (Right Side) -->
+        <div class="preview-container">
+            <div class="panel" style="height: 100%; justify-content: space-between;">
+                <div>
+                    <div class="panel-title">
+                        <i class="ph ph-eye"></i> Vista Previa de la Firma
+                    </div>
+
+                    <!-- Email Container Simulator -->
+                    <div class="preview-box" id="preview-box">
+                        <span class="preview-badge" id="preview-badge">Bandeja de Entrada (Fondo Claro)</span>
+                        
+                        <!-- RENDERED HTML SIGNATURE AREA (EMAIL SAFE TABLE) -->
+                        <div id="signature-render-area">
+                            <table cellpadding="0" cellspacing="0" border="0" style="font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.4; color: #333333; max-width: 480px; min-width: 320px; background-color: transparent; border-collapse: collapse;">
+                                <tr>
+                                    <!-- Logo Column -->
+                                    <td valign="middle" style="padding-right: 20px; vertical-align: middle;">
+                                        <a href="https://morehdmkt.com" target="_blank" style="text-decoration: none; border: none; display: block;" id="sig-logo-link">
+                                            <img id="sig-logo" src="https://raw.githubusercontent.com/SrOtrebor/moremkt/main/SVG/logo-amari.svg" alt="MoreMKT Logo" width="115" style="display: block; border: 0; outline: none; width: 115px; max-width: 115px;" />
+                                        </a>
+                                    </td>
+                                    
+                                    <!-- Vertical Line Divider -->
+                                    <td valign="middle" id="sig-divider" style="border-left: 2px solid #f6c039; padding-left: 20px; vertical-align: middle;">
+                                        <!-- Contact Info Column -->
+                                        <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                                            <tr>
+                                                <td style="padding-bottom: 2px; vertical-align: top;">
+                                                    <span id="sig-name" style="font-family: 'Outfit', 'Inter', sans-serif; font-size: 16px; font-weight: 600; color: #4c2c5c; margin: 0; line-height: 1.2; display: block; letter-spacing: 0.5px;">Roberto Laforcada</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-bottom: 10px; vertical-align: top;">
+                                                    <span id="sig-title" style="font-family: 'Inter', 'Outfit', sans-serif; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; color: #777777; margin: 0; display: block; line-height: 1.2;">Paid Media & Performance Specialist</span>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- WhatsApp -->
+                                            <tr>
+                                                <td style="padding-bottom: 4px; vertical-align: middle; font-size: 13px;">
+                                                    <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                                                        <tr>
+                                                            <td id="sig-label-w" style="font-family: 'Inter', sans-serif; color: #f6c039; font-weight: bold; padding-right: 8px; font-size: 12px; vertical-align: middle; line-height: 1;">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block; width: 13px; height: 13px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                                            </td>
+                                                            <td style="vertical-align: middle; line-height: 1;">
+                                                                <a id="sig-wa-link" href="https://wa.me/5491176426155" target="_blank" style="font-family: 'Inter', sans-serif; color: #555555; text-decoration: none; font-size: 13px; font-weight: 400;">11 7642-6155</a>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- Email -->
+                                            <tr>
+                                                <td style="padding-bottom: 4px; vertical-align: middle; font-size: 13px;">
+                                                    <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                                                        <tr>
+                                                            <td id="sig-label-e" style="font-family: 'Inter', sans-serif; color: #f6c039; font-weight: bold; padding-right: 8px; font-size: 12px; vertical-align: middle; line-height: 1;">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block; width: 13px; height: 13px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                                            </td>
+                                                            <td style="vertical-align: middle; line-height: 1;">
+                                                                <a id="sig-email-link" href="mailto:hola@morehdmkt.com" style="font-family: 'Inter', sans-serif; color: #555555; text-decoration: none; font-size: 13px; font-weight: 400;">hola@morehdmkt.com</a>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- Web -->
+                                            <tr>
+                                                <td style="vertical-align: middle; font-size: 13px;">
+                                                    <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                                                        <tr>
+                                                            <td id="sig-label-web" style="font-family: 'Inter', sans-serif; color: #f6c039; font-weight: bold; padding-right: 8px; font-size: 12px; vertical-align: middle; line-height: 1;">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block; width: 13px; height: 13px;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                                            </td>
+                                                            <td style="vertical-align: middle; line-height: 1;">
+                                                                <a id="sig-web-link" href="https://morehdmkt.com" target="_blank" style="font-family: 'Inter', sans-serif; color: #4c2c5c; text-decoration: none; font-size: 13px; font-weight: bold;" class="theme-accent-link">morehdmkt.com</a>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Background Simulator Toggle (Clean and minimal) -->
+                <div style="display: flex; justify-content: flex-end; margin-top: 0.75rem;">
+                    <button class="btn-toggle" onclick="toggleMailBg()">
+                        <i class="ph ph-sun-dim" id="bg-icon"></i>
+                        <span id="bg-text">Simular Modo Oscuro</span>
+                    </button>
+                </div>
+
+                <div class="action-buttons-container" style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%; margin-top: 1.5rem;">
+                    <button class="btn-copy" id="btn-copy" onclick="copySignatureRichText()">
+                        <i class="ph ph-copy"></i> Copiar Firma (Visual para Gmail/Outlook)
+                    </button>
+                    <button class="btn-copy btn-copy-secondary" id="btn-copy-html" onclick="copySignatureRawHTML()">
+                        <i class="ph ph-code"></i> Copiar Código HTML (Para tu editor de la captura)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Installation Instructions (Full Width) -->
+        <div class="instructions">
+            <h2 id="instructions-header"><i class="ph ph-book-open"></i> Guía de Instalación Rápida</h2>
+            
+            <div class="guide-grid">
+                <!-- Gmail -->
+                <div class="guide-card" id="card-gmail">
+                    <h3><i class="ph ph-google-logo"></i> Google Gmail</h3>
+                    <ol>
+                        <li>Haz clic en el botón <strong>"Copiar Firma al Portapapeles"</strong> de arriba.</li>
+                        <li>Entra a tu Gmail y ve a <strong>Configuración (Rueda dentada) &gt; Ver todos los ajustes</strong>.</li>
+                        <li>En la pestaña <strong>General</strong>, ve hacia abajo hasta la sección <strong>"Firma"</strong>.</li>
+                        <li>Haz clic en <strong>Crear nueva</strong> y asígnale un nombre.</li>
+                        <li>Haz clic en el cuadro de edición a la derecha y presiona <strong>Ctrl + V</strong> (o clic derecho &gt; Pegar).</li>
+                        <li>Asegúrate de configurar tu nueva firma en <strong>"Valores predeterminados de firma"</strong> tanto para correos nuevos como para respuestas.</li>
+                        <li>Baja al final de la página y presiona <strong>Guardar cambios</strong>.</li>
+                    </ol>
+                </div>
+
+                <!-- Outlook Web / Desktop -->
+                <div class="guide-card" id="card-outlook">
+                    <h3><i class="ph ph-microsoft-outlook-logo"></i> Outlook (Web / PC)</h3>
+                    <ol>
+                        <li>Haz clic en el botón <strong>"Copiar Firma al Portapapeles"</strong>.</li>
+                        <li>Abre Outlook y ve a la configuración de firmas:
+                            <ul>
+                                <li><strong>Web:</strong> Configuración (Rueda dentada) &gt; Correo &gt; Redactar y responder &gt; Firmas de correo electrónico.</li>
+                                <li><strong>Desktop:</strong> Archivo &gt; Opciones &gt; Correo &gt; Firmas...</li>
+                            </ul>
+                        </li>
+                        <li>Crea una nueva firma.</li>
+                        <li>En el panel del editor, haz clic derecho y selecciona **Pegar manteniendo el formato de origen** o presiona **Ctrl + V**.</li>
+                        <li>Guarda y asígnala como predeterminada.</li>
+                    </ol>
+                </div>
+
+                <!-- Apple Mail -->
+                <div class="guide-card" id="card-apple">
+                    <h3><i class="ph ph-apple-logo"></i> Apple Mail (macOS)</h3>
+                    <ol>
+                        <li>Haz clic en <strong>"Copiar Firma al Portapapeles"</strong>.</li>
+                        <li>Abre Apple Mail en tu Mac.</li>
+                        <li>Ve a <strong>Mail &gt; Ajustes... &gt; Firmas</strong>.</li>
+                        <li>Selecciona tu cuenta en el panel izquierdo y haz clic en el botón <strong>(+)</strong> para crear una firma.</li>
+                        <li>Desmarca la opción <em>"Utilizar siempre mi tipo de letra por omisión"</em> si está activa.</li>
+                        <li>Borra todo lo que esté en el cuadro de edición de la derecha, haz clic derecho y selecciona **Pegar**.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Crucial Compatibility Warning -->
+            <div class="tips-container" id="tips-box">
+                <i class="ph ph-info"></i>
+                <p>
+                    <strong>💡 Recomendación Técnica de Compatibilidad:</strong> Los clientes de correo móvil e institucionales (como Microsoft Outlook Desktop) a veces bloquean imágenes en formato <strong>SVG</strong> por cuestiones de seguridad. Para asegurar que tu logo se visualice el 100% de las veces en cualquier dispositivo, te recomendamos <strong>exportar tu logotipo a formato PNG</strong> (dimensiones sugeridas: ~240px de ancho), subirlo a tu servidor web (o una plataforma de alojamiento como Imgur o PostImages) y pegar su enlace directo en la casilla <strong>"URL de Logo Personalizado"</strong> de este generador antes de copiarla.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Default brand assets raw links (fully public in the repo)
+        const assetLinks = {
+            violet: {
+                logo: "https://raw.githubusercontent.com/SrOtrebor/moremkt/main/SVG/logo-amari.png",
+                dividerColor: "#f6c039",
+                nameColor: "#4c2c5c",
+                labelColor: "#f6c039",
+                linkColor: "#4c2c5c",
+                titleColor: "#777777",
+                bodyColor: "#555555"
+            },
+            carbon: {
+                logo: "https://raw.githubusercontent.com/SrOtrebor/moremkt/main/SVG/logo-amari.png", // PNG logo-amari looks stunning in both
+                dividerColor: "#e07b2a",
+                nameColor: "#1a1a1a",
+                nameColorDark: "#ffffff",
+                labelColor: "#e07b2a",
+                linkColor: "#e07b2a",
+                titleColor: "#666666",
+                bodyColor: "#555555"
+            }
+        };
+
+        let currentTheme = "violet";
+        let isDarkModePreview = false;
+
+        // Inputs
+        const inputName = document.getElementById("input-name");
+        const inputTitle = document.getElementById("input-title");
+        const inputWhatsapp = document.getElementById("input-whatsapp");
+        const inputEmail = document.getElementById("input-email");
+        const inputWeb = document.getElementById("input-web");
+        const inputLogoUrl = document.getElementById("input-logo-url");
+
+        // Signature elements
+        const sigName = document.getElementById("sig-name");
+        const sigTitle = document.getElementById("sig-title");
+        const sigWaLink = document.getElementById("sig-wa-link");
+        const sigEmailLink = document.getElementById("sig-email-link");
+        const sigWebLink = document.getElementById("sig-web-link");
+        const sigLogo = document.getElementById("sig-logo");
+        const sigDivider = document.getElementById("sig-divider");
+        const sigLabelW = document.getElementById("sig-label-w");
+        const sigLabelE = document.getElementById("sig-label-e");
+        const sigLabelWeb = document.getElementById("sig-label-web");
+
+        // Event listeners to update signature dynamically
+        const inputs = [inputName, inputTitle, inputWhatsapp, inputEmail, inputWeb, inputLogoUrl];
+        inputs.forEach(input => {
+            input.addEventListener("input", updateSignature);
+        });
+
+        function updateSignature() {
+            // Update Text Contents
+            sigName.textContent = inputName.value || "Nombre Apellido";
+            sigTitle.textContent = inputTitle.value || "Cargo o Cargo Especialidad";
+            
+            // Update Whatsapp
+            const phoneClean = inputWhatsapp.value.replace(/[^0-9]/g, "");
+            sigWaLink.textContent = inputWhatsapp.value || "Sin WhatsApp";
+            sigWaLink.href = inputWhatsapp.value ? `https://wa.me/549${phoneClean}` : "#";
+            
+            // Update Email
+            sigEmailLink.textContent = inputEmail.value || "hola@morehdmkt.com";
+            sigEmailLink.href = inputEmail.value ? `mailto:${inputEmail.value}` : "#";
+
+            // Update Web
+            sigWebLink.textContent = inputWeb.value || "morehdmkt.com";
+            sigWebLink.href = inputWeb.value ? `https://${inputWeb.value.replace(/https?:\/\//, '')}` : "#";
+
+            // Logo Image
+            const activeThemeConfig = assetLinks[currentTheme];
+            if (inputLogoUrl.value.trim() !== "") {
+                sigLogo.src = inputLogoUrl.value.trim();
+            } else {
+                // If running locally, load the local PNG in the preview so it's not broken before pushing to GitHub
+                if (window.location.protocol === "file:") {
+                    sigLogo.setAttribute("src", "SVG/logo-amari.png");
+                } else {
+                    sigLogo.setAttribute("src", activeThemeConfig.logo);
+                }
+            }
+        }
+
+        function switchTheme(theme) {
+            currentTheme = theme;
+            
+            // Toggle active classes in selectors
+            document.querySelectorAll(".theme-option").forEach(el => el.classList.remove("active"));
+            if (theme === 'violet') {
+                document.querySelector(".theme-option.theme-violet").classList.add("active");
+                document.getElementById("btn-copy").classList.remove("carbon-active");
+                document.getElementById("btn-copy-html").classList.remove("carbon-active");
+                
+                // Color updates for theme: Violet & Gold
+                sigDivider.style.borderLeftColor = assetLinks.violet.dividerColor;
+                sigLabelW.style.color = assetLinks.violet.labelColor;
+                sigLabelE.style.color = assetLinks.violet.labelColor;
+                sigLabelWeb.style.color = assetLinks.violet.labelColor;
+                sigWebLink.style.color = assetLinks.violet.linkColor;
+                
+                // Reset Preview Colors for light/dark
+                applyThemeColors();
+            } else {
+                document.querySelector(".theme-option.theme-carbon").classList.add("active");
+                document.getElementById("btn-copy").classList.add("carbon-active");
+                document.getElementById("btn-copy-html").classList.add("carbon-active");
+                
+                // Color updates for theme: Carbon & Orange
+                sigDivider.style.borderLeftColor = assetLinks.carbon.dividerColor;
+                sigLabelW.style.color = assetLinks.carbon.labelColor;
+                sigLabelE.style.color = assetLinks.carbon.labelColor;
+                sigLabelWeb.style.color = assetLinks.carbon.labelColor;
+                sigWebLink.style.color = assetLinks.carbon.linkColor;
+                
+                // Reset Preview Colors for light/dark
+                applyThemeColors();
+            }
+
+            // Sync with customized logo URL if present, otherwise default brand logo
+            updateSignature();
+            updateUIGlobalColors();
+        }
+
+        function applyThemeColors() {
+            const config = assetLinks[currentTheme];
+            if (currentTheme === "violet") {
+                sigName.style.color = config.nameColor;
+                sigWaLink.style.color = config.bodyColor;
+                sigEmailLink.style.color = config.bodyColor;
+                sigWebLink.style.color = config.nameColor; // violet link
+            } else { // carbon
+                if (isDarkModePreview) {
+                    sigName.style.color = config.nameColorDark;
+                    sigWaLink.style.color = "#aaaaaa";
+                    sigEmailLink.style.color = "#aaaaaa";
+                    sigWebLink.style.color = config.linkColor; // orange link
+                } else {
+                    sigName.style.color = config.nameColor;
+                    sigWaLink.style.color = config.bodyColor;
+                    sigEmailLink.style.color = config.bodyColor;
+                    sigWebLink.style.color = config.linkColor; // orange link
+                }
+            }
+        }
+
+        function updateUIGlobalColors() {
+            // Accent changes inside UI guides
+            const cards = [document.getElementById("card-gmail"), document.getElementById("card-outlook"), document.getElementById("card-apple")];
+            const tipsBox = document.getElementById("tips-box");
+            
+            if (currentTheme === "carbon") {
+                document.getElementById("instructions-header").style.color = varColor("--accent-orange");
+                cards.forEach(c => c.classList.add("carbon-theme"));
+                tipsBox.classList.add("carbon-theme");
+            } else {
+                document.getElementById("instructions-header").style.color = varColor("--accent-gold");
+                cards.forEach(c => c.classList.remove("carbon-theme"));
+                tipsBox.classList.remove("carbon-theme");
+            }
+        }
+
+        function varColor(name) {
+            return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        }
+
+        function toggleMailBg() {
+            isDarkModePreview = !isDarkModePreview;
+            const previewBox = document.getElementById("preview-box");
+            const bgIcon = document.getElementById("bg-icon");
+            const bgText = document.getElementById("bg-text");
+            const badge = document.getElementById("preview-badge");
+
+            if (isDarkModePreview) {
+                previewBox.classList.add("dark-mode");
+                bgIcon.className = "ph ph-sun";
+                bgText.textContent = "Simular Modo Claro";
+                badge.textContent = "Bandeja de Entrada (Fondo Oscuro)";
+            } else {
+                previewBox.classList.remove("dark-mode");
+                bgIcon.className = "ph ph-sun-dim";
+                bgText.textContent = "Simular Modo Oscuro";
+                badge.textContent = "Bandeja de Entrada (Fondo Claro)";
+            }
+            
+            applyThemeColors();
+        }
+
+        async function copySignatureRichText() {
+            const renderArea = document.getElementById("signature-render-area");
+            
+            // To ensure clipboard pasting contains standard text colors regardless of email dark-mode preview state
+            // we temporarily switch signature to standard light mode styling during copying
+            const wasDark = isDarkModePreview;
+            if (wasDark) {
+                isDarkModePreview = false;
+                applyThemeColors();
+            }
+
+            // Force logo to use absolute web URL during clipboard capture so it renders correctly for recipients
+            const originalLogoSrc = sigLogo.getAttribute("src");
+            if (inputLogoUrl.value.trim() === "") {
+                sigLogo.setAttribute("src", assetLinks[currentTheme].logo);
+            }
+
+            try {
+                // Clipboard Rich Text (HTML) Copying
+                const type = "text/html";
+                // Get the exact HTML content inside the render container
+                const htmlContent = renderArea.innerHTML;
+                
+                // Plaintext fallback for mail clients requiring plain text paste
+                const plainText = `${inputName.value}\n${inputTitle.value}\nWhatsApp: ${inputWhatsapp.value}\nEmail: ${inputEmail.value}\nWeb: ${inputWeb.value}`;
+                
+                const blobHtml = new Blob([htmlContent], { type });
+                const blobText = new Blob([plainText], { type: "text/plain" });
+                
+                const data = [new ClipboardItem({
+                    [type]: blobHtml,
+                    "text/plain": blobText
+                })];
+                
+                await navigator.clipboard.write(data);
+                
+                // Beautiful user feedback
+                const btn = document.getElementById("btn-copy");
+                const originalText = btn.innerHTML;
+                btn.innerHTML = `<i class="ph ph-check-circle"></i> ¡Firma Copiada Exitosamente!`;
+                btn.style.background = "#25d366";
+                btn.style.color = "#fff";
+                btn.style.boxShadow = "0 10px 20px rgba(37, 211, 102, 0.2)";
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = "";
+                    btn.style.color = "";
+                    btn.style.boxShadow = "";
+                    if (currentTheme === "carbon") {
+                        btn.style.background = varColor("--accent-orange");
+                    } else {
+                        btn.style.background = varColor("--accent-gold");
+                    }
+                }, 2500);
+
+            } catch (err) {
+                console.error("Fallo al copiar con Clipboard API, usando fallback...", err);
+                
+                // Classic selection fallback
+                const range = document.createRange();
+                range.selectNode(renderArea);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        alert("¡Firma copiada al portapapeles! Ya puedes ir a la configuración de tu correo y pegarla.");
+                    } else {
+                        alert("No pudimos copiar la firma automáticamente. Selecciona el contenido visual de la firma manualmente, haz clic derecho y dale 'Copiar'.");
+                    }
+                } catch (err2) {
+                    alert("Tu navegador no soporta copiado directo. Selecciona visualmente la firma y cópiala.");
+                }
+                window.getSelection().removeAllRanges();
+            }
+
+            // Restore logo path and dark mode preview state if it was active
+            if (inputLogoUrl.value.trim() === "") {
+                sigLogo.setAttribute("src", originalLogoSrc);
+            }
+            if (wasDark) {
+                isDarkModePreview = true;
+                applyThemeColors();
+            }
+        }
+
+        function copySignatureRawHTML() {
+            const renderArea = document.getElementById("signature-render-area");
+            
+            // To ensure clipboard pasting contains standard text colors regardless of email dark-mode preview state
+            // we temporarily switch signature to standard light mode styling during copying
+            const wasDark = isDarkModePreview;
+            if (wasDark) {
+                isDarkModePreview = false;
+                applyThemeColors();
+            }
+
+            // Force logo to use absolute web URL during clipboard capture so it renders correctly for recipients
+            const originalLogoSrc = sigLogo.getAttribute("src");
+            if (inputLogoUrl.value.trim() === "") {
+                sigLogo.setAttribute("src", assetLinks[currentTheme].logo);
+            }
+
+            const htmlContent = renderArea.innerHTML;
+
+            // Restore logo path and dark preview state if needed
+            if (inputLogoUrl.value.trim() === "") {
+                sigLogo.setAttribute("src", originalLogoSrc);
+            }
+            if (wasDark) {
+                isDarkModePreview = true;
+                applyThemeColors();
+            }
+
+            // Copy raw HTML string to clipboard as plain text
+            navigator.clipboard.writeText(htmlContent).then(() => {
+                const btn = document.getElementById("btn-copy-html");
+                const originalText = btn.innerHTML;
+                btn.innerHTML = `<i class="ph ph-check-circle"></i> ¡Código Copiado!`;
+                btn.style.background = "#25d366";
+                btn.style.color = "#fff";
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = "";
+                    btn.style.color = "";
+                }, 2500);
+            }).catch(err => {
+                alert("Fallo al copiar el código HTML: " + err);
+            });
+        }
+
+        // Initialize on load
+        updateSignature();
+    </script>
+</body>
+</html>
