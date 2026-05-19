@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://instalacionessl.com.ar/</loc>
+    <lastmod>2026-03-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://instalacionessl.com.ar/assets/hero-technician.png</image:loc>
+      <image:title>Técnico profesional Instalaciones SL - Servicio a domicilio en CABA y GBA</image:title>
+      <image:caption>Instalaciones SL: expertos en aire acondicionado, electricidad y reparaciones del hogar</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://instalacionessl.com.ar/assets/logos/Instalaciones-SL-Logo.svg</image:loc>
+      <image:title>Instalaciones SL - Logo oficial</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://instalacionessl.com.ar/agendar.html</loc>
+    <lastmod>2026-03-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+</urlset>

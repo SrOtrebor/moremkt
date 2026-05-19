@@ -1,0 +1,431 @@
+/* ============================================
+   PORTAL DE ESTUDIANTES - ESTILOS
+   ============================================ */
+
+/* Logo en header */
+.header .logo-img {
+    height: 40px;
+    width: auto;
+}
+
+/* Footer con fondo oscuro (igual que landing page) */
+.footer {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: var(--spacing-2xl) 0 var(--spacing-lg);
+}
+
+.footer-logo {
+    max-width: 150px;
+    height: auto;
+    margin-bottom: var(--spacing-md);
+    filter: brightness(0) invert(1);
+    /* Logo en blanco */
+}
+
+.footer-description {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+}
+
+.footer-bottom {
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.footer-bottom p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: var(--text-sm);
+    margin-bottom: var(--spacing-xs);
+}
+
+/* Crédito de desarrollo */
+.footer-credit {
+    font-size: var(--text-sm);
+    margin-top: var(--spacing-xs);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-credit a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer-credit a:hover {
+    color: var(--color-white);
+    text-decoration: underline;
+}
+
+.portal-main {
+    min-height: calc(100vh - 200px);
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--color-background);
+    /* Fondo beige/crema */
+}
+
+/* ============================================
+   LOGIN VIEW
+   ============================================ */
+
+.login-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: var(--spacing-2xl) 0;
+}
+
+.login-card {
+    text-align: center;
+}
+
+.login-card h1 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.login-card .subtitle {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.login-card .form-group {
+    text-align: left;
+    margin-bottom: var(--spacing-lg);
+}
+
+.login-help {
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid var(--color-accent);
+}
+
+.login-help p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.login-help a {
+    color: var(--color-secondary);
+    font-weight: 600;
+}
+
+/* ============================================
+   DASHBOARD VIEW
+   ============================================ */
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-2xl);
+    padding-bottom: var(--spacing-xl);
+    border-bottom: 1px solid var(--color-accent);
+}
+
+.dashboard-user h1 {
+    font-size: var(--text-4xl);
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xs);
+    font-weight: 700;
+}
+
+.dashboard-user p {
+    color: var(--color-secondary);
+    font-size: var(--text-base);
+}
+
+/* ============================================
+   QUICK ACTIONS
+   ============================================ */
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.action-card {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    text-decoration: none;
+    color: var(--color-black);
+    transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.action-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.action-icon {
+    font-size: 3rem;
+    display: block;
+}
+
+.action-card h3 {
+    font-size: var(--text-xl);
+    margin: 0;
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.action-card p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* ============================================
+   PACKAGE CARD
+   ============================================ */
+
+.package-card {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    color: var(--color-white);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.package-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.package-header h3 {
+    color: var(--color-white);
+    margin: 0;
+}
+
+.package-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: 600;
+}
+
+.package-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+}
+
+.stat {
+    text-align: center;
+    padding: var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+}
+
+.stat.success {
+    background: rgba(16, 185, 129, 0.2);
+}
+
+.stat-value {
+    display: block;
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    margin-bottom: var(--spacing-xs);
+}
+
+.stat-label {
+    display: block;
+    font-size: var(--text-sm);
+    opacity: 0.9;
+}
+
+/* ============================================
+   QUICK ACTIONS
+   ============================================ */
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.action-card {
+    text-align: center;
+    padding: var(--spacing-xl);
+    text-decoration: none;
+    color: var(--color-black);
+    transition: all var(--transition-base);
+    border: 2px solid var(--color-accent);
+}
+
+.action-card:hover {
+    border-color: var(--color-secondary);
+    transform: translateY(-4px);
+}
+
+.action-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: var(--spacing-md);
+}
+
+.action-card h3 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-primary);
+}
+
+.action-card p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* ============================================
+   CLASSES LIST
+   ============================================ */
+
+.classes-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.class-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg);
+    background: var(--color-background);
+    border-radius: var(--radius-lg);
+    border-left: 4px solid var(--color-accent);
+}
+
+.class-item.upcoming {
+    border-left-color: var(--color-success);
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.class-info {
+    flex: 1;
+}
+
+.class-date {
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.class-time {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.class-subject {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin-top: var(--spacing-xs);
+}
+
+.class-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.class-actions .btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--text-sm);
+}
+
+/* ============================================
+   MESSAGES
+   ============================================ */
+
+.message {
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--text-sm);
+}
+
+.message.success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid var(--color-success);
+    color: #065F46;
+}
+
+.message.error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--color-error);
+    color: #991B1B;
+}
+
+.message.info {
+    background: rgba(59, 104, 126, 0.1);
+    border: 1px solid var(--color-secondary);
+    color: var(--color-primary);
+}
+
+/* ============================================
+   EMPTY STATES
+   ============================================ */
+
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-3xl) var(--spacing-lg);
+    color: var(--text-secondary);
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.empty-state p {
+    margin-bottom: var(--spacing-lg);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+
+    .package-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .class-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+
+    .class-actions {
+        width: 100%;
+    }
+
+    .class-actions .btn {
+        flex: 1;
+    }
+}

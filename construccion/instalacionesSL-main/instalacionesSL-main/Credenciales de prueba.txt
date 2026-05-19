@@ -1,0 +1,20 @@
+Credenciales de prueba
+APP_USR-db131a86-efd8-4ce3-9833-37eb9a1185b1
+
+Token
+APP_USR-8180034462216818-030910-9c7056d8f26673728186f57d4106a6c6-3250901253
+
+N.º de la aplicación
+8180034462216818
+User ID
+3250901253
+
+Usuario de prueba
+TESTUSER9052899342553607848
+
+Contraseña
+zIfnz1rR6D
+
+Código de verificación
+901253
+

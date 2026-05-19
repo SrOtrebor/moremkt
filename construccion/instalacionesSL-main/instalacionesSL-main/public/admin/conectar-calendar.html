@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conectar Google Calendar - Instalaciones SL Admin</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        .calendar-connection {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 2rem;
+        }
+
+        .connection-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .connection-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-connect {
+            background: linear-gradient(135deg, #4285F4 0%, #34A853 100%);
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: transform 0.2s;
+        }
+
+        .btn-connect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(66, 133, 244, 0.3);
+        }
+
+        .btn-disconnect {
+            background: #dc3545;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .loading.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="calendar-connection">
+        <div class="connection-card">
+            <!-- Estado: Cargando -->
+            <div id="loading-state" class="loading active">
+                <div class="connection-icon">⏳</div>
+                <h2>Verificando conexión...</h2>
+            </div>
+
+            <!-- Estado: No conectado -->
+            <div id="not-connected" style="display: none;">
+                <div class="connection-icon">📅</div>
+                <h2>Conectar Google Calendar</h2>
+                <p>Conecta tu cuenta de Google para generar links de Google Meet automáticamente en cada clase.</p>
+                <p><strong>Es un proceso de un solo click y nunca más tendrás que hacerlo.</strong></p>
+                <button id="btn-connect" class="btn-connect">
+                    📅 Conectar Google Calendar
+                </button>
+                <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #666;">
+                    <a href="dashboard.html">← Volver al Dashboard</a>
+                </p>
+            </div>
+
+            <!-- Estado: Conectado -->
+            <div id="connected" style="display: none;">
+                <div class="success-message">
+                    ✅ Google Calendar conectado correctamente
+                </div>
+                <div class="connection-icon">🎉</div>
+                <h2>¡Todo listo!</h2>
+                <p>Los eventos se crearán automáticamente con Google Meet cuando confirmes una reserva.</p>
+                <p style="margin-top: 1.5rem;">
+                    <a href="dashboard.html" class="btn btn-primary">Ir al Dashboard</a>
+                </p>
+                <button id="btn-disconnect" class="btn-disconnect">
+                    Desconectar
+                </button>
+            </div>
+
+            <!-- Estado: Error -->
+            <div id="error-state" style="display: none;">
+                <div class="connection-icon">❌</div>
+                <h2>Error al conectar</h2>
+                <p id="error-message">Hubo un problema al conectar Google Calendar.</p>
+                <button id="btn-retry" class="btn-connect">
+                    Intentar nuevamente
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5001/instalacione-2a21b/us-central1/api'
+            : 'https://us-central1-instalacione-2a21b.cloudfunctions.net/api';
+
+        // Verificar si hay mensaje en la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('calendar_connected') === 'true') {
+            showConnected();
+        } else if (urlParams.get('calendar_error')) {
+            showError('Error al procesar la autorización. Intenta nuevamente.');
+        } else {
+            checkConnectionStatus();
+        }
+
+        async function checkConnectionStatus() {
+            try {
+                const response = await fetch(`${API_URL}/admin/calendar/status`);
+
+                const data = await response.json();
+
+                if (data.connected) {
+                    showConnected();
+                } else {
+                    showNotConnected();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error al verificar el estado de conexión');
+            }
+        }
+
+        async function connectCalendar() {
+            try {
+                document.getElementById('btn-connect').disabled = true;
+                document.getElementById('btn-connect').textContent = 'Conectando...';
+
+                const response = await fetch(`${API_URL}/admin/calendar/auth-url`);
+
+                const data = await response.json();
+
+                if (data.success && data.authUrl) {
+                    // Redireccionar a Google para autorización
+                    window.location.href = data.authUrl;
+                } else {
+                    showError('No se pudo generar la URL de autorización');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error al conectar con Google');
+            }
+        }
+
+        async function disconnectCalendar() {
+            if (!confirm('¿Seguro que quieres desconectar Google Calendar? Tendrás que volver a autorizar para usar Google Meet.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/admin/calendar/disconnect`, {
+                    method: 'POST'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showNotConnected();
+                } else {
+                    alert('Error al desconectar');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al desconectar');
+            }
+        }
+
+        function showNotConnected() {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('connected').style.display = 'none';
+            document.getElementById('error-state').style.display = 'none';
+            document.getElementById('not-connected').style.display = 'block';
+        }
+
+        function showConnected() {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('not-connected').style.display = 'none';
+            document.getElementById('error-state').style.display = 'none';
+            document.getElementById('connected').style.display = 'block';
+        }
+
+        function showError(message) {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('not-connected').style.display = 'none';
+            document.getElementById('connected').style.display = 'none';
+            document.getElementById('error-state').style.display = 'block';
+            document.getElementById('error-message').textContent = message;
+        }
+
+        // Event listeners
+        document.getElementById('btn-connect').addEventListener('click', connectCalendar);
+        document.getElementById('btn-disconnect').addEventListener('click', disconnectCalendar);
+        document.getElementById('btn-retry').addEventListener('click', () => {
+            showNotConnected();
+        });
+    </script>
+</body>
+
+</html>

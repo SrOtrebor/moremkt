@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /mi-cuenta.html
+Disallow: /mi-cuenta
+Disallow: /admin/login.html
+Disallow: /admin/dashboard.html
+
+Sitemap: https://instalacionessl.com.ar/sitemap.xml

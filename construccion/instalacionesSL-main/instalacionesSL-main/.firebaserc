@@ -1,0 +1,13 @@
+{
+  "projects": {},
+  "targets": {
+    "instalacione-2a21b": {
+      "hosting": {
+        "instalacione-2a21b": [
+          "instalacionessl.com.ar"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

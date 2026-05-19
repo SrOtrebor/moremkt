@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MoreMKT — Publicidad, Asesoría, Capacitación y Soluciones Digitales. Strategy & Performance.">
+  <title>MoreMKT | Strategy & Performance</title>
+  <link rel="icon" href="../SVG/iso.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<!-- ===== HEADER Y TABS ===== -->
+<nav class="main-nav">
+  <div class="nav-inner">
+    <a href="../" class="logo-link" aria-label="MoreMKT - Inicio">
+      <img src="../SVG/logo-full.svg" alt="MoreMKT" class="nav-logo">
+    </a>
+    
+    <div class="tabs-menu" role="tablist">
+      <button class="tab-btn active" data-target="publicidad" data-color="var(--purpura)">Publicidad</button>
+      <button class="tab-btn" data-target="asesoria" data-color="var(--verde)">Asesoría</button>
+      <button class="tab-btn" data-target="capacitacion" data-color="var(--dorado)">Capacitación</button>
+      <button class="tab-btn" data-target="soluciones" data-color="var(--carbon)">Soluciones</button>
+    </div>
+    
+    <button class="hamburger" id="hamburger" aria-label="Menú">☰</button>
+  </div>
+</nav>
+
+<!-- ===== HERO BACKGROUND DINÁMICO ===== -->
+<!-- El fondo ahora es un degradado que arranca en el color activo y baja a blanco -->
+<div class="hero-bg" id="heroBg"></div>
+
+<!-- ===== BANNER RESULTADO MP ===== -->
+<div id="payment-result-banner"></div>
+
+<main class="main-content">
+  
+  <!-- ===== TAB: PUBLICIDAD ===== -->
+  <div id="publicidad" class="tab-content active" role="tabpanel">
+    <!-- HERO SECTION -->
+    <div class="hero-section">
+      <div class="hero-text">
+        <span class="badge">MOREMKT SERVICES</span>
+        <h1>La estrategia detrás<br>de tu crecimiento.</h1>
+        <p>Estrategias de <strong>Paid Media</strong> diseñadas para escalar resultados corporativos en Meta Ads y Google Ads.</p>
+        <button class="btn-hero" onclick="openModal('publicidad','Plan Estratégico')">Explorar Servicios</button>
+      </div>
+      <div class="hero-image">
+        <div class="photo-placeholder">
+          <span>Foto Moreliz</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TARJETAS SUPERPUESTAS (OVERLAP) -->
+    <!-- Estas tarjetas solapan el fondo oscuro y el blanco de abajo -->
+    <div class="overlap-cards-container">
+      
+      <div class="overlap-card pricing-card">
+        <div class="card-icon-wrap" style="color: #4B1D61; background: #f3e8f8;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3>Basic</h3>
+        <p class="subtitle">Publicidad Puntual</p>
+        <ul class="features">
+          <li>✦ 1 cuenta (Meta o Google)</li>
+          <li>✦ Hasta 3 campañas</li>
+          <li>✦ Reporte mensual</li>
+          <li>✦ Soporte WhatsApp</li>
+        </ul>
+        <button class="btn-card" onclick="openModal('publicidad','Plan Basic')">Agendar</button>
+      </div>
+
+      <div class="overlap-card pricing-card featured" style="--accent: #F4BA3C;">
+        <div class="popular-tag">⭐ MÁS POPULAR</div>
+        <div class="card-icon-wrap" style="color: #F4BA3C; background: #fdf5df;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h3>Medium</h3>
+        <p class="subtitle">Estrategia Integral</p>
+        <ul class="features">
+          <li>✦ Meta + Google Ads</li>
+          <li>✦ Hasta 8 campañas</li>
+          <li>✦ Reporte quincenal</li>
+          <li>✦ Reunión mensual</li>
+        </ul>
+        <button class="btn-card-featured" onclick="openModal('publicidad','Plan Medium')">Agendar</button>
+      </div>
+
+      <div class="overlap-card pricing-card">
+        <div class="card-icon-wrap" style="color: #1D3557; background: #e8ecf2;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+        </div>
+        <h3>Premium</h3>
+        <p class="subtitle">Todo lo Anterior + CM</p>
+        <ul class="features">
+          <li>✦ Campañas ilimitadas</li>
+          <li>✦ Dashboard semanal</li>
+          <li>✦ Community Management</li>
+          <li>✦ Gestora dedicada</li>
+        </ul>
+        <button class="btn-card" onclick="openModal('publicidad','Plan Premium')">Agendar</button>
+      </div>
+      
+    </div>
+  </div>
+
+
+  <!-- ===== TAB: ASESORÍA ===== -->
+  <div id="asesoria" class="tab-content" role="tabpanel">
+    <!-- HERO SECTION -->
+    <div class="hero-section">
+      <div class="hero-text">
+        <span class="badge" style="color:#10B981;">CONSULTORÍA</span>
+        <h1>Decisiones basadas<br>en datos reales.</h1>
+        <p>Sesiones técnicas de marketing, embudos y procesos. Analizamos tu negocio para optimizar tu inversión y maximizar las ventas.</p>
+        <button class="btn-hero" style="background:#10B981; color:#fff;" onclick="openModal('asesoria','Consultoría Estratégica')">Agendar Sesión (MP)</button>
+      </div>
+      <div class="hero-image">
+        <div class="photo-placeholder"><span>🎯</span></div>
+      </div>
+    </div>
+
+    <!-- TARJETAS SUPERPUESTAS -->
+    <div class="overlap-cards-container grid-4">
+      <div class="overlap-card service-card">
+        <div class="card-icon-wrap" style="color: #10B981; background: #e0f8ee;">🔍</div>
+        <h3>Auditoría de Campañas</h3>
+        <p>Revisión completa de cuentas activas y oportunidades claras de mejora.</p>
+      </div>
+      <div class="overlap-card service-card">
+        <div class="card-icon-wrap" style="color: #10B981; background: #e0f8ee;">📊</div>
+        <h3>Estrategia de Medios</h3>
+        <p>Plan de medios personalizado según los objetivos y presupuesto de tu marca.</p>
+      </div>
+      <div class="overlap-card service-card">
+        <div class="card-icon-wrap" style="color: #10B981; background: #e0f8ee;">🎯</div>
+        <h3>Optimización CRO</h3>
+        <p>Análisis del funnel de ventas y mejora de la tasa de conversión.</p>
+      </div>
+      <div class="overlap-card service-card">
+        <div class="card-icon-wrap" style="color: #10B981; background: #e0f8ee;">🤝</div>
+        <h3>Consultoría Mensual</h3>
+        <p>Reuniones periódicas de seguimiento y ajuste estratégico a medida.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== TAB: CAPACITACIÓN ===== -->
+  <div id="capacitacion" class="tab-content" role="tabpanel">
+    <!-- HERO SECTION -->
+    <div class="hero-section">
+      <div class="hero-text">
+        <span class="badge" style="color:#F4BA3C;">FORMACIÓN</span>
+        <h1>Cursos y<br>Mentorías.</h1>
+        <p>Seleccioná <strong>3 o más cursos</strong> en nuestro pack y desbloqueás una mentoría grupal online <strong>totalmente gratis</strong>.</p>
+        <button class="btn-hero" style="background:#F4BA3C; color:#1a1a1a;" id="packBtnTop">Armar Pack</button>
+      </div>
+      <div class="hero-image">
+        <div class="photo-placeholder"><span>🎓</span></div>
+      </div>
+    </div>
+
+    <!-- TARJETAS SUPERPUESTAS -->
+    <div class="promo-bar-container">
+      <div class="promo-bar" id="promoBar">🎁 ¡Mentoría grupal gratuita incluida en tu pack!</div>
+    </div>
+    
+    <div class="overlap-cards-container grid-4">
+      <div class="overlap-card course-card">
+        <div class="card-icon-wrap" style="color: #F4BA3C; background: #fef5e0;">📱</div>
+        <h3>Meta Ads desde Cero</h3>
+        <p class="course-meta">⏱ 6 semanas · Inicial</p>
+        <label class="course-check-label">
+          <input type="checkbox" class="course-check"> Agregar al pack
+        </label>
+      </div>
+      <div class="overlap-card course-card">
+        <div class="card-icon-wrap" style="color: #F4BA3C; background: #fef5e0;">🔍</div>
+        <h3>Google Ads Avanzado</h3>
+        <p class="course-meta">⏱ 8 semanas · Intermedio</p>
+        <label class="course-check-label">
+          <input type="checkbox" class="course-check"> Agregar al pack
+        </label>
+      </div>
+      <div class="overlap-card course-card">
+        <div class="card-icon-wrap" style="color: #F4BA3C; background: #fef5e0;">📊</div>
+        <h3>Analytics y Métricas</h3>
+        <p class="course-meta">⏱ 4 semanas · Inicial</p>
+        <label class="course-check-label">
+          <input type="checkbox" class="course-check"> Agregar al pack
+        </label>
+      </div>
+      <div class="overlap-card course-card">
+        <div class="card-icon-wrap" style="color: #F4BA3C; background: #fef5e0;">🚀</div>
+        <h3>Estrategia Performance</h3>
+        <p class="course-meta">⏱ 10 semanas · Avanzado</p>
+        <label class="course-check-label">
+          <input type="checkbox" class="course-check"> Agregar al pack
+        </label>
+      </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 2rem;">
+      <button class="btn-pack" id="packBtn">Seleccioná al menos un curso</button>
+    </div>
+  </div>
+
+
+  <!-- ===== TAB: SOLUCIONES ===== -->
+  <div id="soluciones" class="tab-content" role="tabpanel">
+    <!-- HERO SECTION -->
+    <div class="hero-section">
+      <div class="hero-text">
+        <span class="badge" style="color:#60a5fa;">END-TO-END</span>
+        <h1>Transformación<br>Digital.</h1>
+        <p>Proyectos de alto impacto con acompañamiento presencial en tus oficinas. Desde el diagnóstico hasta la implementación completa.</p>
+        <button class="btn-hero" style="background:#1D3557; color:#fff;" onclick="openModal('soluciones','Diagnóstico Gratuito')">Agendar Diagnóstico</button>
+      </div>
+      <div class="hero-image">
+        <div class="photo-placeholder"><span>🚀</span></div>
+      </div>
+    </div>
+
+    <!-- TARJETAS SUPERPUESTAS TIMELINE -->
+    <div class="overlap-cards-container timeline-container grid-3">
+      <div class="overlap-card step-card">
+        <div class="step-num">1</div>
+        <h3>Diagnóstico</h3>
+        <p>Sesión online de 60 min para analizar tu situación actual.</p>
+        <span class="step-highlight">Gratis · Sin compromiso</span>
+      </div>
+      <div class="overlap-card step-card">
+        <div class="step-num">2</div>
+        <h3>Presupuesto</h3>
+        <p>Propuesta a medida con estrategia y plazos detallados.</p>
+        <span class="step-highlight">En 48 horas</span>
+      </div>
+      <div class="overlap-card step-card">
+        <div class="step-num">3</div>
+        <h3>Implementación</h3>
+        <p>Ejecución integral con presencia en tu empresa.</p>
+        <span class="step-highlight">Seguimiento real</span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ===== SOCIAL PROOF ===== -->
+<section class="social-proof" aria-label="Marcas que confían en MoreMKT">
+  <div class="section-title-wrap">
+    <span class="small-tag">CONFIANZA</span>
+    <h2>Impulsando el éxito.</h2>
+  </div>
+  <div class="logos-track-wrapper" style="margin-top:2rem;">
+    <div class="logos-track" aria-hidden="true">
+      <div class="logo-item">CLIENTE 1</div>
+      <div class="logo-item">CLIENTE 2</div>
+      <div class="logo-item">CLIENTE 3</div>
+      <div class="logo-item">CLIENTE 4</div>
+      <div class="logo-item">CLIENTE 5</div>
+      <div class="logo-item">CLIENTE 6</div>
+      <div class="logo-item">CLIENTE 1</div>
+      <div class="logo-item">CLIENTE 2</div>
+      <div class="logo-item">CLIENTE 3</div>
+      <div class="logo-item">CLIENTE 4</div>
+      <div class="logo-item">CLIENTE 5</div>
+      <div class="logo-item">CLIENTE 6</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="../SVG/logo-full.svg" alt="MoreMKT">
+      <p>Estrategia de Paid Media con enfoque en resultados. Hacemos crecer negocios con publicidad inteligente.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <p>📞 11 7642-6155</p>
+      <p>✉️ hola@morehdmkt.com</p>
+      <p>🌐 morehdmkt.com</p>
+    </div>
+    <div class="footer-col">
+      <h4>Redes</h4>
+      <a href="#" class="social-link">Instagram →</a>
+      <a href="#" class="social-link">LinkedIn →</a>
+      <a href="https://wa.me/5491176426155" class="social-link" target="_blank" rel="noopener">WhatsApp →</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto rápido</h4>
+      <div id="qrCode"></div>
+      <p style="font-size:0.78rem; margin-top:0.4rem;">Escaneá para escribirnos</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 MoreMKT. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<!-- ===== WHATSAPP FAB ===== -->
+<a href="https://wa.me/5491176426155" target="_blank" rel="noopener noreferrer" class="whatsapp-fab" aria-label="Contactar por WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.119.553 4.109 1.523 5.84L0 24l6.335-1.509A11.946 11.946 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.914a9.895 9.895 0 0 1-5.032-1.374l-.361-.214-3.762.896.952-3.658-.235-.376A9.884 9.884 0 0 1 2.086 12C2.086 6.515 6.515 2.086 12 2.086S21.914 6.515 21.914 12 17.485 21.914 12 21.914z"/>
+  </svg>
+</a>
+
+<!-- ===== BOOKING MODAL ===== -->
+<!-- ... Mismo Modal que antes ... -->
+<div class="booking-modal" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()" aria-label="Cerrar">✕</button>
+
+    <div class="modal-step" id="step1">
+      <h2 id="modal-title">Agendar Consulta</h2>
+      <p style="font-size:0.82rem; color:#6b7280; margin-bottom:1rem;">
+        <span id="modal-service-label" style="font-weight:800; color:#4B1D61;"></span>
+      </p>
+
+      <p style="font-size:0.78rem; font-weight:700; color:#374151; margin-bottom:0.4rem;">📅 Elegí tu fecha</p>
+      <div id="modal-calendar"></div>
+
+      <p style="font-size:0.78rem; font-weight:700; color:#374151; margin:0.8rem 0 0.3rem;">🕐 Elegí tu horario</p>
+      <div id="modal-slots"><p class="mc-hint">Seleccioná una fecha para ver horarios.</p></div>
+
+      <form id="modal-booking-form" onsubmit="return false;" style="margin-top:1.1rem;">
+        <div class="modal-row">
+          <div class="modal-form-group">
+            <label for="modal-name">Nombre *</label>
+            <input type="text" id="modal-name" placeholder="Tu nombre" required autocomplete="name">
+          </div>
+          <div class="modal-form-group">
+            <label for="modal-phone">WhatsApp *</label>
+            <input type="tel" id="modal-phone" placeholder="11 7642-6155" required autocomplete="tel">
+          </div>
+        </div>
+        <div class="modal-form-group">
+          <label for="modal-email">Correo electrónico *</label>
+          <input type="email" id="modal-email" placeholder="hola@empresa.com" required autocomplete="email">
+        </div>
+      </form>
+
+      <div class="modal-summary">
+        <p><span>Fecha:</span> <strong id="modal-sum-date">Sin seleccionar</strong></p>
+        <p><span>Horario:</span> <strong id="modal-sum-time">Sin seleccionar</strong></p>
+      </div>
+
+      <button class="btn-pay" id="modal-btn-pay" onclick="submitModalBooking()" disabled>
+        💳 Confirmar y Pagar
+      </button>
+    </div>
+
+    <!-- STEP 2 / STEP 3... -->
+    <div class="modal-step hidden" id="step2">
+      <div style="text-align:center; padding:2rem 0;"><h2>Redirigiendo...</h2></div>
+    </div>
+    <div class="modal-step hidden" id="step3">
+      <div style="text-align:center; padding:1.5rem 0;"><h2>¡Solicitud enviada!</h2><button onclick="closeModal()">Cerrar</button></div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

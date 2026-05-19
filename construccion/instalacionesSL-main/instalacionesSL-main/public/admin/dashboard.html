@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Instalaciones SL Admin</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/logos/Instalaciones-SL-Logo.svg" alt="Instalaciones SL"
+                    style="max-width: 180px; margin-bottom: 12px;">
+                <div class="user-info" id="user-info">Cargando...</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="availability">
+                    <span class="icon">📅</span>
+                    <span>Horarios</span>
+                </a>
+                <a href="#" class="nav-item" data-section="blocks">
+                    <span class="icon">🚫</span>
+                    <span>Bloqueos</span>
+                </a>
+                <a href="#" class="nav-item" data-section="bookings">
+                    <span class="icon">📋</span>
+                    <span>Reservas</span>
+                </a>
+                <a href="#" class="nav-item" data-section="pricing">
+                    <span class="icon">💰</span>
+                    <span>Precios</span>
+                </a>
+                <a href="conectar-calendar.html" class="nav-item">
+                    <span class="icon">🔗</span>
+                    <span>Google Calendar</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-logout" id="btn-logout">Cerrar Sesión</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sección: Configurar Horarios -->
+            <section id="section-availability" class="section active">
+                <div class="page-header">
+                    <h1>Configurar Horarios</h1>
+                    <p>Define los días y horarios disponibles para visitas técnicas</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Horarios por Día</h3>
+                        <p>Configura los rangos horarios para cada día de la semana</p>
+                    </div>
+
+                    <form id="form-availability">
+                        <!-- Lunes -->
+                        <div class="form-row">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="monday-enabled" name="monday-enabled">
+                                <label for="monday-enabled">Lunes</label>
+                            </div>
+                            <div class="time-inputs">
+                                <input type="time" id="monday-start1" value="09:00">
+                                <span>-</span>
+                                <input type="time" id="monday-end1" value="12:00">
+                            </div>
+                            <div class="time-inputs">
+                                <input type="time" id="monday-start2" value="16:00">
+                                <span>-</span>
+                                <input type="time" id="monday-end2" value="20:00">
+                            </div>
+                        </div>
+
+                        <!-- Martes -->
+                        <div class="form-row">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="tuesday-enabled" name="tuesday-enabled">
+                                <label for="tuesday-enabled">Martes</label>
+                            </div>
+                            <div class="time-inputs">
+                                <input type="time" id="tuesday-start1" value="09:00">
+                                <span>-</span>
+                                <input type="time" id="tuesday-end1" value="12:00">
+                            </div>
+                            <div class="time-inputs">
+                                <input type="time" id="tuesday-start2" value="16:00">
+                                <span>-</span>
+                                <input type="time" id="tuesday-end2" value="20:00">
+                            </div>
+                        </div>
+
+                        <!-- Miércoles -->
+                        <div class="form-row">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="wednesday-enabled" name="wednesday-enabled">
+                                <label for="wednesday-enabled">Miércoles</label>
+                            </div>
+                            <div class="time-inputs">
+                                <input type="time" id="wednesday-start1" value="09:00">
+                                <span>-</span>
+                                <input type="time" id="wednesday-end1" value="12:00">
+                            </div>
+                            <div class="time-inputs">
+                                <input type="time" id="wednesday-start2" value="16:00">
+                                <span>-</span>
+                                <input type="time" id="wednesday-end2" value="20:00">
+                            </div>
+                        </div>
+
+                        <!-- Jueves -->
+                        <div class="form-row">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="thursday-enabled" name="thursday-enabled">
+                                <label for="thursday-enabled">Jueves</label>
+                            </div>
+                            <div class="time-inputs">
+                                <input type="time" id="thursday-start1" value="09:00">
+                                <span>-</span>
+                                <input type="time" id="thursday-end1" value="12:00">
+                            </div>
+                            <div class="time-inputs">
+                                <input type="time" id="thursday-start2" value="16:00">
+                                <span>-</span>
+                                <input type="time" id="thursday-end2" value="20:00">
+                            </div>
+                        </div>
+
+                        <!-- Viernes -->
+                        <div class="form-row">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="friday-enabled" name="friday-enabled">
+                                <label for="friday-enabled">Viernes</label>
+                            </div>
+                            <div class="time-inputs">
+                                <input type="time" id="friday-start1" value="09:00">
+                                <span>-</span>
+                                <input type="time" id="friday-end1" value="12:00">
+                            </div>
+                            <div class="time-inputs">
+                                <input type="time" id="friday-start2" value="16:00">
+                                <span>-</span>
+                                <input type="time" id="friday-end2" value="20:00">
+                            </div>
+                        </div>
+
+                        <!-- Sábado -->
+                        <div class="form-row">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="saturday-enabled" name="saturday-enabled">
+                                <label for="saturday-enabled">Sábado</label>
+                            </div>
+                            <div class="time-inputs">
+                                <input type="time" id="saturday-start1" value="09:00">
+                                <span>-</span>
+                                <input type="time" id="saturday-end1" value="12:00">
+                            </div>
+                            <div class="time-inputs">
+                                <input type="time" id="saturday-start2" value="16:00">
+                                <span>-</span>
+                                <input type="time" id="saturday-end2" value="20:00">
+                            </div>
+                        </div>
+
+                        <!-- Domingo -->
+                        <div class="form-row">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="sunday-enabled" name="sunday-enabled">
+                                <label for="sunday-enabled">Domingo</label>
+                            </div>
+                            <div class="time-inputs">
+                                <input type="time" id="sunday-start1" value="09:00">
+                                <span>-</span>
+                                <input type="time" id="sunday-end1" value="12:00">
+                            </div>
+                            <div class="time-inputs">
+                                <input type="time" id="sunday-start2" value="16:00">
+                                <span>-</span>
+                                <input type="time" id="sunday-end2" value="20:00">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Duración de sesión (minutos)</label>
+                                <input type="number" id="session-duration" value="60" min="30" step="15">
+                            </div>
+                            <div class="form-group">
+                                <label>Días de anticipación mínima</label>
+                                <input type="number" id="min-days-advance" value="1" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Días de anticipación máxima</label>
+                                <input type="number" id="max-days-advance" value="30" min="1">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Guardar Configuración</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Sección: Bloquear Horarios -->
+            <section id="section-blocks" class="section">
+                <div class="page-header">
+                    <h1>Bloquear Horarios</h1>
+                    <p>Bloquea horarios específicos cuando no estés disponible</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Crear Bloqueo</h3>
+                        <p>Bloquea un horario específico</p>
+                    </div>
+
+                    <form id="form-block">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Fecha</label>
+                                <input type="date" id="block-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Hora inicio</label>
+                                <input type="time" id="block-start" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Hora fin</label>
+                                <input type="time" id="block-end" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Motivo (opcional)</label>
+                                <input type="text" id="block-reason" placeholder="Ej: Médico, Vacaciones">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">Bloquear Horario</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Bloqueos Activos</h3>
+                        <p>Horarios bloqueados actualmente</p>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="blocks-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Horario</th>
+                                    <th>Motivo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="blocks-tbody">
+                                <tr>
+                                    <td colspan="4" style="text-align: center; color: var(--text-secondary);">
+                                        Cargando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección: Ver Reservas -->
+            <section id="section-bookings" class="section">
+                <div class="page-header">
+                    <h1>Reservas</h1>
+                    <p>Gestiona todas las reservas de visitas técnicas</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Filtros</h3>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <select id="filter-status">
+                                <option value="all">Todas</option>
+                                <option value="confirmed">Confirmadas</option>
+                                <option value="pending_payment">Pendientes</option>
+                                <option value="cancelled">Canceladas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Desde</label>
+                            <input type="date" id="filter-start-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Hasta</label>
+                            <input type="date" id="filter-end-date">
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: flex-end;">
+                            <button type="button" class="btn btn-success" id="btn-filter-bookings">Filtrar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table id="bookings-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>Cliente</th>
+                                    <th>Email</th>
+                                    <th>Teléfono</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookings-tbody">
+                                <tr>
+                                    <td colspan="8" style="text-align: center; color: var(--text-secondary);">
+                                        Cargando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección: Configurar Precios -->
+            <section id="section-pricing" class="section">
+                <div class="page-header">
+                    <h1>Configurar Precios</h1>
+                    <p>Actualiza los precios de los paquetes de visitas técnicas</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Precios de Paquetes</h3>
+                        <p>Todos los precios en pesos argentinos (ARS)</p>
+                    </div>
+
+                    <form id="form-pricing">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Sesión Individual</label>
+                                <input type="number" id="price-individual" value="10000" min="0" step="100" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Actualizar Precios</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>
