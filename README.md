@@ -1,52 +1,70 @@
-# MoreMKT - Landing Page "Próximamente"
+# MoreMKT - Plataforma Web y Sistema de Reservas
 
-Esta es la página web de aterrizaje (Landing Page) en modo "Próximamente" para **MoreMKT** (Estrategia de Paid Media y Performance).
-Existen dos versiones visuales del diseño para comparación y elección de la clienta.
+Esta es la plataforma oficial de **MoreMKT** (Estrategia de Paid Media y Performance). El sistema ha evolucionado de una simple Landing Page de "Próximamente" a una Single Page Application (SPA) dinámica con un sistema completo e integrado de reservas automatizadas, pagos online y un panel de administración.
 
 ## 🚀 Tecnologías Utilizadas
 
-- **HTML5:** Estructura semántica del contenido.
-- **CSS3 Vainilla:** Estilos personalizados, gradientes y animaciones avanzadas (sin frameworks externos para asegurar máximo rendimiento y compatibilidad).
-- **Google Fonts:**
-  - `Outfit` para los títulos principales (look moderno).
-  - `Inter` para los textos de lectura (alta legibilidad).
-- **Phosphor Icons:** Para la iconografía minimalista y moderna de los botones de contacto.
+- **Frontend Core:** HTML5 semántico, CSS3 Vainilla, JavaScript Vainilla (ES6+).
+- **Backend / Nube:** Node.js, Express, Firebase Cloud Functions y Firestore Database.
+- **Pagos:** Mercado Pago SDK.
+- **Estilos Dinámicos:** Animaciones *glassmorphism*, colorimetría dinámica adaptada a la marca y *hover effects* inmersivos.
+- **Tipografías e Iconos:** `Outfit` (títulos), `Inter` (cuerpo de texto) e iconos de *Phosphor Icons*.
 
 ## 📂 Estructura de Archivos
 
-- `index.html`: Versión principal — fondo violeta/púrpura con acento amarillo dorado.
-- `style.css`: Estilos de la versión violeta.
-- `index-dark.html`: Versión alternativa — fondo carbón oscuro con acento naranja dorado (inspirada en el dorso de la tarjeta de presentación).
-- `style-dark.css`: Estilos de la versión carbón.
-- `SVG/`: Directorio que contiene los recursos gráficos de la marca.
-  - `logo-amari.svg`: El logotipo principal en color amarillo (usado en ambas versiones).
-  - `logo-full.svg`: Versión completa del logotipo.
-  - `iso.svg`: El isotipo utilizado como icono de la pestaña del navegador (Favicon).
+```
+/
+├── index.html               # SPA Principal (Landing, Servicios, Promociones)
+├── reserva.html             # Interfaz pública de agendamiento de citas
+├── style.css                # Sistema de diseño central y variables CSS
+├── CONFIGURACION_FIREBASE.md # Guía para el despliegue a la nube y Mercado Pago
+│
+├── SVG/                     # Recursos gráficos e isotipos de la marca
+│
+├── js/
+│   ├── app.js               # Lógica interactiva de la SPA (Tabs, bundles, colores)
+│   └── booking.js           # Lógica del frontend del calendario de reservas
+│
+├── admin/                   # 🔒 Panel de Administración (Privado)
+│   ├── dashboard.html       # Panel de control principal (Horarios, Bloqueos, Lista de citas)
+│   ├── login.html           # Inicio de sesión protegido por contraseña
+│   ├── css/admin.css        # Estilos específicos del dashboard
+│   └── js/
+│       ├── dashboard.js     # Lógica de las vistas y gestión administrativa
+│       └── login.js         # Lógica de autenticación del administrador
+│
+└── functions/               # ⚙️ Código del Servidor (Backend)
+    ├── package.json         # Dependencias (firebase-admin, mercadopago, jsonwebtoken, etc.)
+    └── index.js             # API REST (Rutas de agendamiento, disponibilidad, webhooks, auth)
+```
 
-## 🎨 Características de la Interfaz (ambas versiones)
+## ✨ Funcionalidades Principales
 
-1. **Fondo Inmersivo:** Gradiente radial que oscurece los bordes y resalta el logo en el centro.
-2. **Animaciones Dinámicas:**
-   - **SlideUp & Fade:** Los textos y botones entran deslizando hacia arriba en cascada al cargar la web.
-   - **Flotación:** El logotipo principal tiene un movimiento sutil de flotación continua.
-   - **Hover effects:** Los botones de contacto tienen efectos estilo *glassmorphism* que se iluminan al pasar el cursor.
-   - **Esquinas decorativas:** Bordes asimétricos que aparecen suavemente simulando el marco del diseño.
-3. **Contactos Directos:**
-   - Enlace configurado para enviar un mensaje directo a WhatsApp al número `11 7642-6155`.
-   - Enlace `mailto:` configurado hacia `hola@morehdmkt.com`.
+### 1. Single Page Application (SPA) Dinámica
+La navegación en el `index.html` es completamente asíncrona. Los menús de servicios cambian dinámicamente tanto el contenido en pantalla como el color del fondo global para ofrecer una experiencia inmersiva y de alto impacto estético.
+También incluye calculadoras de *Bundles* para promocionar la venta de múltiples cursos ("Comprar pack de cursos + Mentoría gratis").
 
-## 🖌️ Diferencias entre versiones
+### 2. Sistema de Agendamiento
+A través de `reserva.html`, los usuarios pueden:
+- Visualizar un calendario inteligente que calcula automáticamente los espacios disponibles en base a los horarios de atención y la duración de las citas configurados.
+- Elegir día y hora.
+- Introducir su información básica.
+- Abonar el monto de forma automática en Mercado Pago, redirigiendo a la pasarela de cobro segura.
+- Regresar a la pantalla de éxito (o error) tras la compra.
 
-| | Versión Violeta (`index.html`) | Versión Carbón (`index-dark.html`) |
-|---|---|---|
-| **Fondo** | Púrpura oscuro `#4c2c5c → #23122c` | Carbón oscuro `#3a3a3a → #1a1a1a` |
-| **Acento** | Amarillo dorado `#f6c039` | Naranja dorado `#e07b2a` |
-| **Inspiración** | Identidad visual de marca | Dorso tarjeta de presentación |
-| **Logo** | `logo-amari.svg` | `logo-amari.svg` |
+### 3. Panel de Administración
+Un tablero web privado (`/admin`) en el cual el equipo de MoreMKT puede:
+- **Gestionar Horarios:** Activar/desactivar días laborables, definir rangos horarios (ej. de 9:00 a 12:00 y de 16:00 a 20:00) y la duración en minutos de cada asesoría.
+- **Gestión de Bloqueos:** Añadir y quitar excepciones temporales (ej. feriados o turnos médicos).
+- **Consultar Reservas:** Listado consolidado de citas procesadas para control.
+- **Ajustar Precios:** Modificar el precio de la asesoría sin tocar el código de la web.
 
-## 🛠️ Cómo visualizar y editar el sitio
+## 🛠️ Despliegue y Configuración
 
-- **Para ver la versión violeta:** Doble clic en `index.html`.
-- **Para ver la versión carbón:** Doble clic en `index-dark.html`.
-- **Para modificar un texto:** Abrí el archivo `.html` correspondiente, buscá el texto y guardá.
-- **Para cambiar los colores:** Abrí `style.css` o `style-dark.css` y modificá las variables bajo `:root` (ej. `--accent-color`, `--bg-color-center`).
+Para poner en producción la base de datos (Firestore), las reglas de seguridad y las Cloud Functions conectadas a Mercado Pago, debes leer detenidamente el documento interno: `CONFIGURACION_FIREBASE.md`. Este detalla el proceso de vinculación usando `firebase-tools` y los tokens de API de Mercado Pago.
+
+## 🎨 Consideraciones de Diseño
+
+Se buscó una estética "Premium":
+- **Colores Principales:** Púrpura oscuro `#4c2c5c` a `#23122c` con acentos en dorado `#f6c039`.
+- **Interacciones:** Efectos translúcidos (backdrop-filter) que simulan superficies de cristal, transiciones sutiles e indicadores de interfaz limpios para enfocar la atención del usuario sin abrumarlo visualmente.

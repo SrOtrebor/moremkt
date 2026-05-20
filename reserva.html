@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Reserva tu cita con MoreMKT.">
+    <title>Reservar Cita | MoreMKT</title>
+    <link rel="icon" href="SVG/iso.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        .reserva-container {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 650px;
+            text-align: left;
+            margin-top: 2rem;
+        }
+        
+        .step-header {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .step-header h2 {
+            font-family: var(--font-heading);
+            color: var(--accent-color);
+            font-size: 1.5rem;
+        }
+
+        /* Calendario */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-header button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .calendar-header button:hover { background: var(--accent-color); color: var(--bg-color-edge); }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+
+        .day-name {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .day {
+            padding: 10px 5px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.2s;
+        }
+
+        .day.clickable { cursor: pointer; }
+        .day.clickable:hover { background: rgba(246, 192, 57, 0.2); border-color: var(--accent-color); }
+        .day.selected { background: var(--accent-color); color: var(--bg-color-edge); font-weight: bold; }
+        .day.disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* Horarios */
+        .slots-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+        
+        .slot-btn {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font-body);
+            color: var(--text-primary);
+        }
+
+        .slot-btn:hover { border-color: var(--accent-color); }
+        .slot-btn.selected { background: var(--accent-color); color: var(--bg-color-edge); border-color: var(--accent-color); font-weight: bold; }
+
+        /* Formulario */
+        .form-group {
+            margin-bottom: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label { font-size: 0.9rem; color: var(--text-secondary); }
+        .form-group input {
+            padding: 12px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: white;
+            font-family: var(--font-body);
+        }
+        .form-group input:focus { outline: none; border-color: var(--accent-color); }
+
+        .booking-summary {
+            background: rgba(0,0,0,0.4);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            border: 1px solid rgba(246, 192, 57, 0.2);
+        }
+
+        .booking-summary p { margin-bottom: 0.5rem; font-size: 0.95rem; }
+        .booking-summary strong { color: var(--accent-color); }
+
+        .btn-pay {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent-color);
+            color: var(--bg-color-edge);
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-pay:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(246, 192, 57, 0.3); }
+        .btn-pay:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        #payment-result { display: none; text-align: center; }
+        #payment-result h2 { color: var(--accent-color); margin-bottom: 1rem; }
+        
+        .volver-link { color: var(--text-secondary); text-decoration: none; margin-bottom: 1rem; display: inline-block; transition: color 0.2s; }
+        .volver-link:hover { color: var(--accent-color); }
+    </style>
+</head>
+<body>
+    <div class="corner-decor top-left"></div>
+    <div class="corner-decor top-right"></div>
+    <div class="corner-decor bottom-left"></div>
+    <div class="corner-decor bottom-right"></div>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <main class="container" style="max-width: 800px; padding-top: 3rem; padding-bottom: 3rem;">
+        <div class="brand-container" style="animation: none; opacity: 1; transform: translateY(0); margin-bottom: 0;">
+            <a href="index.html">
+                <img src="SVG/logo-amari.svg" alt="MoreMKT Logo" class="logo" style="max-width: 200px;">
+            </a>
+        </div>
+
+        <div id="booking-section" class="reserva-container">
+            <a href="index.html" class="volver-link"><i class="ph ph-arrow-left"></i> Volver al inicio</a>
+            
+            <h1 class="title" style="font-size: 2rem; margin-bottom: 0.5rem; text-transform: none;">Reserva tu Asesoría</h1>
+            <p class="subtitle" style="margin-bottom: 2rem; max-width: 100%;">Selecciona el día y horario. Serás redirigido a Mercado Pago para confirmar tu cita.</p>
+
+            <div class="step-header">
+                <h2>1. Elige tu Horario</h2>
+            </div>
+            <div id="calendar-wrapper"></div>
+            <div id="time-slots-wrapper" style="margin-top: 1.5rem;">
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 10px;">Horarios Disponibles:</p>
+                <div id="slots-grid" class="slots-grid">
+                    <p style="color: rgba(255,255,255,0.5); font-size: 0.9rem;">Selecciona una fecha en el calendario.</p>
+                </div>
+            </div>
+
+            <div class="step-header" style="margin-top: 3rem;">
+                <h2>2. Tus Datos</h2>
+            </div>
+            <form id="booking-form">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="full-name" required placeholder="Ej: Juan Pérez">
+                </div>
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="email" required placeholder="Ej: juan@gmail.com">
+                </div>
+
+                <div class="booking-summary">
+                    <h3>Resumen</h3>
+                    <div style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+                        <p><strong>Fecha:</strong> <span id="summary-date">Selecciona una fecha</span></p>
+                        <p><strong>Horario:</strong> <span id="summary-time">Selecciona un horario</span></p>
+                        <p><strong>Inversión:</strong> <span id="summary-price">$10.000</span></p>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-pay" class="btn-pay" disabled>
+                    Pagar con Mercado Pago
+                </button>
+            </form>
+        </div>
+
+        <div id="payment-result" class="reserva-container">
+            <h2 id="result-title">Procesando pago...</h2>
+            <p id="result-message" style="margin-bottom: 2rem; color: var(--text-secondary);">Por favor espera un momento.</p>
+            <a href="index.html" style="color: var(--accent-color); text-decoration: none; border: 1px solid var(--accent-color); padding: 10px 20px; border-radius: 8px;">Volver al Inicio</a>
+        </div>
+    </main>
+
+    <script src="js/booking.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const status = params.get('status');
+
+        if (status) {
+            document.getElementById('booking-section').style.display = 'none';
+            const resultSection = document.getElementById('payment-result');
+            resultSection.style.display = 'block';
+
+            const title = document.getElementById('result-title');
+            const message = document.getElementById('result-message');
+
+            if (status === 'approved') {
+                title.textContent = '¡Pago Exitoso!';
+                message.textContent = 'Tu asesoría ha sido confirmada correctamente. ¡Te esperamos!';
+            } else if (status === 'pending') {
+                title.textContent = 'Pago Pendiente';
+                message.textContent = 'Tu pago está siendo procesado. Tu cita quedará confirmada en breve.';
+            } else {
+                title.textContent = 'Error en el Pago';
+                message.textContent = 'No pudimos procesar tu pago. Por favor, intenta nuevamente.';
+                title.style.color = '#ef4444';
+            }
+        }
+    </script>
+</body>
+</html>
