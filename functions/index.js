@@ -205,7 +205,7 @@ function generateTimeSlots(startTime, endTime, duration) {
 
 app.post("/createBooking", async (req, res) => {
     try {
-        const { name, email, date, time } = req.body;
+        const { name, email, phone, date, time } = req.body;
         if (!name || !email || !date || !time) return res.status(400).json({ error: "Faltan datos obligatorios" });
 
         const existing = await db.collection("bookings").where("date", "==", date).where("time", "==", time).where("status", "in", ["confirmed", "pending_payment"]).get();
@@ -217,6 +217,7 @@ app.post("/createBooking", async (req, res) => {
         const bookingRef = await db.collection("bookings").add({
             clientName: name,
             clientEmail: email,
+            clientPhone: phone || "",
             date, time, price,
             status: "pending_payment",
             createdAt: admin.firestore.FieldValue.serverTimestamp()
@@ -225,7 +226,7 @@ app.post("/createBooking", async (req, res) => {
         if (!process.env.MP_ACCESS_TOKEN) {
              // Modo prueba si no hay MP
              await bookingRef.update({ status: "confirmed" });
-             return res.status(200).json({ init_point: "/reserva.html?status=approved" });
+             return res.status(200).json({ init_point: "/construccion/index.html?status=approved" });
         }
 
         const mpClient = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
@@ -240,9 +241,9 @@ app.post("/createBooking", async (req, res) => {
                 payer: { name, email },
                 external_reference: bookingRef.id,
                 back_urls: {
-                    success: `${baseUrl}/reserva.html?status=approved`,
-                    failure: `${baseUrl}/reserva.html?status=failure`,
-                    pending: `${baseUrl}/reserva.html?status=pending`
+                    success: `${baseUrl}/construccion/index.html?status=approved`,
+                    failure: `${baseUrl}/construccion/index.html?status=failure`,
+                    pending: `${baseUrl}/construccion/index.html?status=pending`
                 },
                 auto_return: 'approved',
                 notification_url: `${process.env.FUNCTIONS_URL}/api/mercadopagoWebhook`

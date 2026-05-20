@@ -10,6 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <link rel="stylesheet" href="app.css">
 </head>
 <body>
@@ -352,9 +354,10 @@
         </div>
       </form>
 
-      <div class="modal-summary">
-        <p><span>Fecha:</span> <strong id="modal-sum-date">Sin seleccionar</strong></p>
-        <p><span>Horario:</span> <strong id="modal-sum-time">Sin seleccionar</strong></p>
+      <div class="modal-summary" style="margin-top: 1.2rem; background: #f9fafb; padding: 1rem; border-radius: 12px; border: 1px solid #e5e7eb;">
+        <p style="margin-bottom: 0.4rem; font-size: 0.85rem; color: #4b5563;"><span style="font-weight: 500;">Fecha:</span> <strong id="modal-sum-date" style="color: #111827; font-weight: 700; margin-left: 5px;">Sin seleccionar</strong></p>
+        <p style="margin-bottom: 0.4rem; font-size: 0.85rem; color: #4b5563;"><span style="font-weight: 500;">Horario:</span> <strong id="modal-sum-time" style="color: #111827; font-weight: 700; margin-left: 5px;">Sin seleccionar</strong></p>
+        <p style="margin-bottom: 0; font-size: 0.85rem; color: #4b5563;"><span style="font-weight: 500;">Inversión:</span> <strong id="modal-sum-price" style="color: var(--purpura); font-weight: 800; margin-left: 5px;">$10.000 ARS</strong></p>
       </div>
 
       <button class="btn-pay" id="modal-btn-pay" onclick="submitModalBooking()" disabled>
