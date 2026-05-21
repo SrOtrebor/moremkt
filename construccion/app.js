@@ -466,3 +466,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+// --- 7. LÓGICA DE MENÚ HAMBURGUESA EN MÓVIL ---
+document.addEventListener('DOMContentLoaded', () => {
+  const hamburger = document.getElementById('hamburger');
+  const tabsMenu = document.querySelector('.tabs-menu');
+
+  if (hamburger && tabsMenu) {
+    hamburger.addEventListener('click', () => {
+      tabsMenu.classList.toggle('open');
+      hamburger.classList.toggle('active');
+      
+      // Alternar ícono entre hamburguesa ☰ y cerrar ✕
+      if (hamburger.classList.contains('active')) {
+        hamburger.textContent = '✕';
+      } else {
+        hamburger.textContent = '☰';
+      }
+    });
+
+    // Cerrar el menú automáticamente al hacer clic en cualquier pestaña
+    const tabButtons = tabsMenu.querySelectorAll('.tab-btn');
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabsMenu.classList.remove('open');
+        hamburger.classList.remove('active');
+        hamburger.textContent = '☰';
+      });
+    });
+  }
+});

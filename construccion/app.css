@@ -533,8 +533,80 @@ ul { list-style: none; }
 }
 
 @media (max-width: 768px) {
-  .tabs-menu { display: none; /* en mobile habría que hacer un select o menu vertical */ }
-  .hamburger { display: block; }
+  .tabs-menu {
+    display: none; /* Oculto por defecto en móvil */
+    position: absolute;
+    top: 90px;
+    left: 0;
+    right: 0;
+    background: rgba(17, 24, 39, 0.95); /* Fondo oscuro elegante con desenfoque */
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem 0;
+    gap: 0.8rem;
+    height: auto;
+    z-index: 99;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+    transform: translateY(-10px);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  }
+  
+  .tabs-menu.open {
+    display: flex;
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
+  .tab-btn {
+    width: 85%;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6) !important;
+    font-size: 0.95rem;
+    height: 48px;
+    margin: 0 !important;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    transition: var(--transition);
+  }
+  
+  .tab-btn::before {
+    display: none; /* Eliminar el trapecio en móvil */
+  }
+  
+  .tab-btn.active {
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    height: 48px;
+  }
+  
+  /* Colores activos de pestaña en móvil */
+  .tab-btn[data-target="publicidad"].active { background: var(--purpura); }
+  .tab-btn[data-target="asesoria"].active { background: var(--verde); }
+  .tab-btn[data-target="capacitacion"].active { background: var(--dorado); color: #1a1a1a !important; }
+  .tab-btn[data-target="soluciones"].active { background: var(--azul); }
+
+  .hamburger { 
+    display: block; 
+    font-size: 2rem;
+    color: #111827; 
+    transition: transform 0.3s ease;
+    outline: none;
+    z-index: 101;
+  }
+  .hamburger.active {
+    transform: rotate(90deg);
+  }
+
   .hero-text h1 { font-size: 2.4rem; }
   .grid-4, .grid-3 { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
