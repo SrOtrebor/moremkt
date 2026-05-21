@@ -422,3 +422,47 @@ document.addEventListener('DOMContentLoaded', () => {
 window.openModal = openModal;
 window.closeModal = closeModal;
 window.submitModalBooking = submitModalBooking;
+
+// --- 6. EFECTO INTERACTIVO 3D TILT EN TARJETAS ---
+document.addEventListener('DOMContentLoaded', () => {
+  const cards = document.querySelectorAll('.overlap-card');
+  
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left; // Posición X dentro de la tarjeta
+      const y = e.clientY - rect.top;  // Posición Y dentro de la tarjeta
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      // Calcular ángulos de inclinación (máximo 12 grados de flexión)
+      const rotateX = ((centerY - y) / centerY) * 12;
+      const rotateY = ((x - centerX) / centerX) * 12;
+      
+      // Determinar la transformación base según la jerarquía de la tarjeta
+      let baseTransform = '';
+      if (card.classList.contains('featured')) {
+        baseTransform = 'scale(1.05) translateZ(35px) translateY(-5px)';
+      } else {
+        baseTransform = 'translateZ(25px) translateY(-8px)';
+      }
+      
+      // Aplicar rotaciones 3D dinámicas
+      card.style.transform = `${baseTransform} rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      
+      // Desplazar el marco de cristal trasero (::after) en dirección contraria para Parallax
+      const offsetAfterX = -rotateY * 1.5;
+      const offsetAfterY = rotateX * 1.5;
+      card.style.setProperty('--after-x', `${offsetAfterX}px`);
+      card.style.setProperty('--after-y', `${offsetAfterY}px`);
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      // Restaurar los valores y alineación de abanico original de forma fluida
+      card.style.transform = '';
+      card.style.setProperty('--after-x', '8px');
+      card.style.setProperty('--after-y', '8px');
+    });
+  });
+});
