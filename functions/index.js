@@ -36,8 +36,33 @@ function requireAuth(req, res, next) {
 }
 
 // ============================================
-// ADMIN: AUTENTICACIÓN
+// ADMIN: AUTENTICACIÓN Y CONFIGURACIÓN INICIAL
 // ============================================
+app.post("/admin/setup", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) return res.status(400).json({ error: "Email y contraseña requeridos" });
+
+        // Bloqueo de seguridad: Solo permite ejecutarse si no hay ningún administrador registrado
+        const adminSnapshot = await db.collection("admin_users").limit(1).get();
+        if (!adminSnapshot.empty) {
+            return res.status(400).json({ error: "El sistema ya ha sido inicializado anteriormente" });
+        }
+
+        const passwordHash = await bcrypt.hash(password, 10);
+        await db.collection("admin_users").add({
+            email,
+            passwordHash,
+            createdAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+
+        return res.status(201).json({ success: true, message: "Usuario administrador inicial creado correctamente" });
+    } catch (error) {
+        console.error("Error en setup:", error);
+        return res.status(500).json({ error: "Error en el servidor durante la inicialización" });
+    }
+});
+
 app.post("/admin/login", async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -273,4 +298,5 @@ app.post("/mercadopagoWebhook", async (req, res) => {
     }
 });
 
-exports.api = functions.https.onRequest(app);
+const { onRequest } = require("firebase-functions/v2/https");
+exports.api = onRequest({ cors: true, maxInstances: 10 }, app);

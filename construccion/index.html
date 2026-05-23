@@ -20,7 +20,7 @@
 <nav class="main-nav">
   <div class="nav-inner">
     <a href="../" class="logo-link" aria-label="MoreMKT - Inicio">
-      <img src="../SVG/logo-full.svg" alt="MoreMKT" class="nav-logo">
+      <img src="../SVG/logo-vio.svg" alt="MoreMKT" class="nav-logo">
     </a>
     
     <div class="tabs-menu" role="tablist">
@@ -54,7 +54,7 @@
         <button class="btn-hero" onclick="document.querySelector('.overlap-cards-container').scrollIntoView({ behavior: 'smooth' })">Explorar Servicios</button>
       </div>
       <div class="hero-image">
-        <img src="Fotos/avatar_publicidad.png" alt="MoreMKT - Publicidad" class="avatar-illustration">
+        <img src="Fotos/Fotos real/1.png" alt="MoreMKT - Publicidad" class="avatar-illustration">
       </div>
     </div>
 
@@ -62,51 +62,59 @@
     <!-- Estas tarjetas solapan el fondo oscuro y el blanco de abajo -->
     <div class="overlap-cards-container">
       
+      <!-- CARD 1: PACK INICIAL: VENTAS YA -->
       <div class="overlap-card pricing-card">
         <div class="card-icon-wrap" style="color: #4B1D61; background: #f3e8f8;">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <i class="ph ph-rocket-launch"></i>
         </div>
-        <h3>Basic</h3>
-        <p class="subtitle">Publicidad Puntual</p>
-        <ul class="features">
-          <li><i class="ph ph-check"></i> 1 cuenta (Meta o Google)</li>
-          <li><i class="ph ph-check"></i> Hasta 3 campañas</li>
-          <li><i class="ph ph-check"></i> Reporte mensual</li>
-          <li><i class="ph ph-check"></i> Soporte WhatsApp</li>
-        </ul>
-        <button class="btn-card" onclick="openModal('publicidad','Plan Basic')">Agendar</button>
+        <h3>Ventas Ya</h3>
+        <p class="subtitle">Pack Inicial</p>
+        
+        <div class="price-tag" style="margin-top: auto; margin-bottom: 1rem;">
+          <span style="font-size: 1.8rem; font-weight: 900; color: #111827;">$350.000</span>
+          <span style="font-size: 0.85rem; color: var(--grey); font-weight: 500;">/ mes</span>
+        </div>
+
+        <button class="btn-details" onclick="openDetailsModal('ventas-ya')">Ver detalles del pack →</button>
+        <button class="btn-card" onclick="openModal('publicidad','Pack Inicial: Ventas Ya', '$350.000 ARS / mes')">Agendar</button>
       </div>
 
+      <!-- CARD 2: PACK DE POSICIONAMIENTO -->
       <div class="overlap-card pricing-card featured" style="--accent: #F4BA3C;">
-        <div class="popular-tag"><i class="ph ph-star-fill"></i> MÁS POPULAR</div>
+        <div class="popular-tag"><i class="ph ph-star-fill"></i> RECOMENDADO</div>
         <div class="card-icon-wrap" style="color: #F4BA3C; background: #fdf5df;">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <i class="ph ph-megaphone-simple"></i>
         </div>
-        <h3>Medium</h3>
-        <p class="subtitle">Estrategia Integral</p>
-        <ul class="features">
-          <li><i class="ph ph-check"></i> Meta + Google Ads</li>
-          <li><i class="ph ph-check"></i> Hasta 8 campañas</li>
-          <li><i class="ph ph-check"></i> Reporte quincenal</li>
-          <li><i class="ph ph-check"></i> Reunión mensual</li>
-        </ul>
-        <button class="btn-card-featured" onclick="openModal('publicidad','Plan Medium')">Agendar</button>
+        <h3>Posicionamiento</h3>
+        <p class="subtitle">Estructura & Automatización</p>
+        
+        <div class="price-tag" style="margin-top: auto; margin-bottom: 1rem;">
+          <span style="font-size: 1.8rem; font-weight: 900; color: #111827;">A convenir</span>
+          <span style="font-size: 0.85rem; color: var(--grey); font-weight: 500;">/ mes</span>
+        </div>
+
+        <button class="btn-details" style="color: #b45309;" onclick="openDetailsModal('posicionamiento')">Ver detalles del pack →</button>
+        <button class="btn-card-featured" onclick="openModal('publicidad','Pack de Posicionamiento', 'A convenir')">Agendar</button>
       </div>
 
+      <!-- CARD 3: PACK PRODUCCIONES -->
       <div class="overlap-card pricing-card">
         <div class="card-icon-wrap" style="color: #1D3557; background: #e8ecf2;">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+          <i class="ph ph-sparkles"></i>
         </div>
-        <h3>Premium</h3>
-        <p class="subtitle">Todo lo Anterior + CM</p>
-        <ul class="features">
-          <li><i class="ph ph-check"></i> Campañas ilimitadas</li>
-          <li><i class="ph ph-check"></i> Dashboard semanal</li>
-          <li><i class="ph ph-check"></i> Community Management</li>
-          <li><i class="ph ph-check"></i> Gestora dedicada</li>
-        </ul>
-        <button class="btn-card" onclick="openModal('publicidad','Plan Premium')">Agendar</button>
+        <h3>Producciones</h3>
+        <p class="subtitle">Experiencia Premium Definitiva</p>
+        
+        <div class="price-tag" style="margin-top: auto; margin-bottom: 1rem;">
+          <span style="font-size: 1.8rem; font-weight: 900; color: #111827;">A convenir</span>
+          <span style="font-size: 0.85rem; color: var(--grey); font-weight: 500;">/ mes</span>
+        </div>
+
+        <button class="btn-details" onclick="openDetailsModal('producciones')">Ver detalles del pack →</button>
+        <button class="btn-card" onclick="openModal('publicidad','Pack Producciones', 'A convenir')">Agendar</button>
       </div>
+      
+    </div>
       
     </div>
   </div>
@@ -120,10 +128,10 @@
         <span class="badge" style="color:#10B981;">CONSULTORÍA</span>
         <h1>Decisiones basadas<br>en datos reales.</h1>
         <p>Sesiones técnicas de marketing, embudos y procesos. Analizamos tu negocio para optimizar tu inversión y maximizar las ventas.</p>
-        <button class="btn-hero" style="background:#10B981; color:#fff;" onclick="openModal('asesoria','Consultoría Estratégica')">Agendar Sesión (MP)</button>
+        <button class="btn-hero" style="background:#10B981; color:#fff;" onclick="openModal('asesoria','Consultoría Estratégica', '$10.000 ARS')">Agendar Sesión (MP)</button>
       </div>
       <div class="hero-image">
-        <img src="Fotos/avatar_asesoria.png" alt="MoreMKT - Asesoría" class="avatar-illustration">
+        <img src="Fotos/Fotos real/2.png" alt="MoreMKT - Asesoría" class="avatar-illustration">
       </div>
     </div>
 
@@ -164,7 +172,7 @@
         <button class="btn-hero" style="background:#F4BA3C; color:#1a1a1a;" id="packBtnTop">Armar Pack</button>
       </div>
       <div class="hero-image">
-        <img src="Fotos/avatar_capacitacion.png" alt="MoreMKT - Capacitación" class="avatar-illustration">
+        <img src="Fotos/Fotos real/3.png" alt="MoreMKT - Capacitación" class="avatar-illustration">
       </div>
     </div>
 
@@ -222,10 +230,10 @@
         <span class="badge" style="color:#60a5fa;">END-TO-END</span>
         <h1>Transformación<br>Digital.</h1>
         <p>Proyectos de alto impacto con acompañamiento presencial en tus oficinas. Desde el diagnóstico hasta la implementación completa.</p>
-        <button class="btn-hero" style="background:#1D3557; color:#fff;" onclick="openModal('soluciones','Diagnóstico Gratuito')">Agendar Diagnóstico</button>
+        <button class="btn-hero" style="background:#1D3557; color:#fff;" onclick="openModal('soluciones','Diagnóstico Gratuito', 'Gratis')">Agendar Diagnóstico</button>
       </div>
       <div class="hero-image">
-        <img src="Fotos/avatar_soluciones.png" alt="MoreMKT - Soluciones" class="avatar-illustration">
+        <img src="Fotos/Fotos real/4.png" alt="MoreMKT - Soluciones" class="avatar-illustration">
       </div>
     </div>
 
@@ -254,26 +262,147 @@
 
 </main>
 
-<!-- ===== SOCIAL PROOF ===== -->
-<section class="social-proof" aria-label="Marcas que confían en MoreMKT">
+<!-- ===== SEPARADOR BRAND RESPONSIVO DE CASOS DE ÉXITO ===== -->
+<div class="brand-separator">
+  <img src="Fotos/Fotos real/Casos de exitos.jpeg" alt="Casos de Éxito MoreMKT" class="separator-img">
+</div>
+
+<!-- ===== CASOS DE ÉXITO & TESTIMONIOS ===== -->
+<section class="social-proof" aria-label="Casos de éxito y opiniones de clientes de MoreMKT">
   <div class="section-title-wrap">
-    <span class="small-tag">CONFIANZA</span>
-    <h2>Impulsando el éxito.</h2>
+    <span class="small-tag">CASOS DE ÉXITO</span>
+    <h2>Opiniones que impulsan confianza.</h2>
   </div>
-  <div class="logos-track-wrapper" style="margin-top:2rem;">
+  <div class="logos-track-wrapper" style="margin-top:2.5rem;">
     <div class="logos-track" aria-hidden="true">
-      <div class="logo-item">CLIENTE 1</div>
-      <div class="logo-item">CLIENTE 2</div>
-      <div class="logo-item">CLIENTE 3</div>
-      <div class="logo-item">CLIENTE 4</div>
-      <div class="logo-item">CLIENTE 5</div>
-      <div class="logo-item">CLIENTE 6</div>
-      <div class="logo-item">CLIENTE 1</div>
-      <div class="logo-item">CLIENTE 2</div>
-      <div class="logo-item">CLIENTE 3</div>
-      <div class="logo-item">CLIENTE 4</div>
-      <div class="logo-item">CLIENTE 5</div>
-      <div class="logo-item">CLIENTE 6</div>
+      
+      <!-- TESTIMONIAL CARD 1 -->
+      <div class="logo-item testimonial-card">
+        <div class="stars-wrap">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Incrementamos nuestras ventas online en un 180% en los primeros tres meses. La pauta digital de MoreMKT es sumamente profesional y orientada a resultados."</p>
+        <div class="client-info">
+          <div class="client-avatar" style="background: linear-gradient(135deg, #4B1D61, #8B5CF6);">SR</div>
+          <div class="client-details">
+            <h5>Sebastián R.</h5>
+            <span>CEO, Decohome E-commerce</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESTIMONIAL CARD 2 -->
+      <div class="logo-item testimonial-card">
+        <div class="stars-wrap">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Delegar la estrategia y las redes fue la mejor decisión. El Pack de Posicionamiento organizó nuestra marca y recuperamos el control de nuestro tiempo."</p>
+        <div class="client-info">
+          <div class="client-avatar" style="background: linear-gradient(135deg, #23a07a, #10B981);">MG</div>
+          <div class="client-details">
+            <h5>Mariela G.</h5>
+            <span>Co-Founder, Bloom Boutique</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESTIMONIAL CARD 3 -->
+      <div class="logo-item testimonial-card">
+        <div class="stars-wrap">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"La calidad de la producción audiovisual es impecable. Lograron que nuestra marca se vea costosa y sofisticada, atrayendo clientes de alto valor."</p>
+        <div class="client-info">
+          <div class="client-avatar" style="background: linear-gradient(135deg, #1D3557, #3b82f6);">IM</div>
+          <div class="client-details">
+            <h5>Ignacio M.</h5>
+            <span>Director, Apex Real Estate</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESTIMONIAL CARD 4 -->
+      <div class="logo-item testimonial-card">
+        <div class="stars-wrap">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"La consultoría estratégica nos dio claridad total. Tomamos decisiones basadas en datos y optimizamos al máximo la inversión publicitaria."</p>
+        <div class="client-info">
+          <div class="client-avatar" style="background: linear-gradient(135deg, #e9b342, #F59E0B);">VP</div>
+          <div class="client-details">
+            <h5>Valeria P.</h5>
+            <span>Gerente Mkt, TecnoZone</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESTIMONIAL CARD 5 -->
+      <div class="logo-item testimonial-card">
+        <div class="stars-wrap">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"El pack de cursos capacitó a nuestro equipo in-company de forma totalmente práctica. La mentoría grupal online fue el broche de oro."</p>
+        <div class="client-info">
+          <div class="client-avatar" style="background: linear-gradient(135deg, #8b5cf6, #ec4899);">JS</div>
+          <div class="client-details">
+            <h5>Juan Manuel S.</h5>
+            <span>Director Ops, Global Dist.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESTIMONIAL CARD 6 -->
+      <div class="logo-item testimonial-card">
+        <div class="stars-wrap">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"MoreMKT es el partner estratégico que toda empresa necesita para escalar. Su acompañamiento presencial y diagnóstico end-to-end marcan la diferencia."</p>
+        <div class="client-info">
+          <div class="client-avatar" style="background: linear-gradient(135deg, #4B1D61, #23a07a);">CD</div>
+          <div class="client-details">
+            <h5>Carolina D.</h5>
+            <span>Founder, Kroma Cosméticos</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DUPLICADOS PARA LOOP INFINITO FLUIDO -->
+      <div class="logo-item testimonial-card">
+        <div class="stars-wrap">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Incrementamos nuestras ventas online en un 180% en los primeros tres meses. La pauta digital de MoreMKT es sumamente profesional y orientada a resultados."</p>
+        <div class="client-info">
+          <div class="client-avatar" style="background: linear-gradient(135deg, #4B1D61, #8B5CF6);">SR</div>
+          <div class="client-details">
+            <h5>Sebastián R.</h5>
+            <span>CEO, Decohome E-commerce</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="logo-item testimonial-card">
+        <div class="stars-wrap">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Delegar la estrategia y las redes fue la mejor decisión. El Pack de Posicionamiento organizó nuestra marca y recuperamos el control de nuestro tiempo."</p>
+        <div class="client-info">
+          <div class="client-avatar" style="background: linear-gradient(135deg, #23a07a, #10B981);">MG</div>
+          <div class="client-details">
+            <h5>Mariela G.</h5>
+            <span>Co-Founder, Bloom Boutique</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="logo-item testimonial-card">
+        <div class="stars-wrap">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"La calidad de la producción audiovisual es impecable. Lograron que nuestra marca se vea costosa y sofisticada, atrayendo clientes de alto valor."</p>
+        <div class="client-info">
+          <div class="client-avatar" style="background: linear-gradient(135deg, #1D3557, #3b82f6);">IM</div>
+          <div class="client-details">
+            <h5>Ignacio M.</h5>
+            <span>Director, Apex Real Estate</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="logo-item testimonial-card">
+        <div class="stars-wrap">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"La consultoría estratégica nos dio claridad total. Tomamos decisiones basadas en datos y optimizamos al máximo la inversión publicitaria."</p>
+        <div class="client-info">
+          <div class="client-avatar" style="background: linear-gradient(135deg, #e9b342, #F59E0B);">VP</div>
+          <div class="client-details">
+            <h5>Valeria P.</h5>
+            <span>Gerente Mkt, TecnoZone</span>
+          </div>
+        </div>
+      </div>
+      
     </div>
   </div>
 </section>
@@ -282,7 +411,7 @@
 <footer class="site-footer">
   <div class="footer-grid">
     <div class="footer-brand">
-      <img src="../SVG/logo-full.svg" alt="MoreMKT">
+      <img src="../SVG/logo-vio.svg" alt="MoreMKT">
       <p>Estrategia de Paid Media con enfoque en resultados. Hacemos crecer negocios con publicidad inteligente.</p>
     </div>
     <div class="footer-col">
@@ -369,6 +498,17 @@
     </div>
     <div class="modal-step hidden" id="step3">
       <div style="text-align:center; padding:1.5rem 0;"><h2>¡Solicitud enviada!</h2><button onclick="closeModal()">Cerrar</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DETAILS MODAL (POPUP) ===== -->
+<div class="booking-modal" id="detailsModal" role="dialog" aria-modal="true" aria-labelledby="details-title">
+  <div class="modal-overlay" id="detailsOverlay"></div>
+  <div class="modal-card" style="max-width: 600px; padding: 2.2rem 2.5rem;">
+    <button class="modal-close" onclick="closeDetailsModal()" aria-label="Cerrar">✕</button>
+    <div id="details-modal-content">
+      <!-- Se llena dinámicamente con JS -->
     </div>
   </div>
 </div>

@@ -1,9 +1,9 @@
 // Configuración de API
 // REEMPLAZAR 'TU-PROJECT-ID' con el ID de tu proyecto de Firebase
-const PROJECT_ID = 'TU-PROJECT-ID';
+const PROJECT_ID = 'moremkt-reservas';
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? `http://localhost:5001/${PROJECT_ID}/us-central1/api`
-    : `https://us-central1-${PROJECT_ID}.cloudfunctions.net/api`;
+    : `https://api-hchn7up7oq-uc.a.run.app`;
 
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');

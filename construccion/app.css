@@ -233,35 +233,57 @@ ul { list-style: none; }
 .grid-3 { grid-template-columns: repeat(3, 1fr); display: grid; }
 
 .overlap-card {
-  background: rgba(255, 255, 255, 0.42);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: transparent;
+  border: none;
   border-radius: 24px;
   padding: 2.8rem 2.2rem;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.03),
-              inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.03);
   flex: 1;
   position: relative;
   display: flex; 
   flex-direction: column;
   
+  /* Optimización definitiva para evitar textos desenfocados en transformaciones de GPU */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  
+  /* Aceleración por hardware para composición fluida */
+  will-change: transform;
+  
   /* Habilitar 3D preserve para hijos y el pseudo-elemento */
   transform-style: preserve-3d;
   
-  /* Transición de regreso suave al salir el mouse */
-  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
-              background 0.4s ease, 
-              border-color 0.4s ease, 
+  /* Transición de regreso suave al salir el mouse (mouseleave) */
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
               box-shadow 0.4s ease;
   
-  /* Inclinación inicial tipo abanico */
-  transform: rotateY(5deg) translateZ(0);
+  /* Mantener plano estáticamente para nitidez tipográfica perfecta al cargar la página */
+  transform: none;
+}
+
+/* Capa de fondo separada con Glassmorphism para evitar que afecte a la tipografía del contenedor principal */
+.overlap-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 24px;
+  z-index: -2; /* Detrás del texto y elementos interactivos */
+  pointer-events: none;
+  
+  /* Transiciones fluidas */
+  transition: background 0.4s ease, border-color 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  transform: translateZ(-2px);
 }
 
 .overlap-card:nth-child(3) {
-  /* Inclinación simétrica al otro lado */
-  transform: rotateY(-5deg) translateZ(0);
+  /* Mantener plano estáticamente para nitidez tipográfica perfecta */
+  transform: none;
 }
 
 /* Doble marco de cristal flotante trasero (Double Glass Parallax Layer) */
@@ -274,7 +296,7 @@ ul { list-style: none; }
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 24px;
-  z-index: -1;
+  z-index: -3; /* Por detrás del ::before */
   pointer-events: none;
   
   /* Posición 3D por detrás de la tarjeta */
@@ -284,27 +306,35 @@ ul { list-style: none; }
               border-color 0.4s ease;
 }
 
-/* Hover base por CSS */
+/* Hover base por CSS - modificamos la sombra de la tarjeta y el fondo del ::before */
 .overlap-card:hover {
   z-index: 20;
+  /* Al hacer hover, removemos la transición de transform para que el ratón controle la tarjeta al instante y con total fluidez */
+  transition: transform 0s !important, box-shadow 0.4s ease;
+}
+.overlap-card:hover::before {
   background: rgba(255, 255, 255, 0.55);
+  transform: translateZ(-5px); /* Ligero desplazamiento en hover */
 }
 
 /* Brillo y desfasamiento trasero al pasar el cursor (Hover Glows) */
-.overlap-card:nth-child(1):hover {
+.overlap-card:nth-child(1):hover::before {
   border-color: rgba(75, 29, 97, 0.4);
-  box-shadow: 0 30px 65px rgba(75, 29, 97, 0.15),
-              inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+}
+.overlap-card:nth-child(1):hover {
+  box-shadow: 0 30px 65px rgba(75, 29, 97, 0.15);
 }
 .overlap-card:nth-child(1):hover::after {
   background: rgba(75, 29, 97, 0.04);
   border-color: rgba(75, 29, 97, 0.2);
 }
 
-.overlap-card:nth-child(3):hover {
+.overlap-card:nth-child(3):hover::before {
   border-color: rgba(29, 53, 87, 0.4);
-  box-shadow: 0 30px 65px rgba(29, 53, 87, 0.15),
-              inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+}
+.overlap-card:nth-child(3):hover {
+  box-shadow: 0 30px 65px rgba(29, 53, 87, 0.15);
+}
 }
 .overlap-card:nth-child(3):hover::after {
   background: rgba(29, 53, 87, 0.04);
@@ -373,10 +403,30 @@ ul { list-style: none; }
   transform: scale(1.1) translateZ(5px);
 }
 
-/* Colores personalizados del check */
-.pricing-card:nth-child(1) .features li i { color: var(--purpura); }
-.pricing-card.featured .features li i { color: #d09820; }
-.pricing-card:nth-child(3) .features li i { color: var(--azul); }
+.btn-details {
+  background: transparent;
+  color: var(--grey);
+  border: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 8px 0;
+  text-align: left;
+  transition: var(--transition);
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: auto;
+  margin-bottom: 1rem;
+  
+  /* Flota en eje Z */
+  transform: translateZ(15px);
+  position: relative;
+  z-index: 10;
+}
+.btn-details:hover {
+  color: #111827;
+  transform: translateX(4px) translateZ(20px);
+}
 
 .btn-card {
   width: 100%; 
@@ -408,22 +458,29 @@ ul { list-style: none; }
   box-shadow: 0 6px 15px rgba(17, 24, 39, 0.18);
 }
 
-.pricing-card.featured {
+.pricing-card.featured::before {
   border: 1.5px solid rgba(244, 186, 60, 0.55);
   background: rgba(255, 255, 255, 0.52);
-  
-  /* Tarjeta destacada sobresale al frente dinámicamente */
-  transform: scale(1.03) translateZ(15px);
-  box-shadow: 0 12px 40px rgba(244, 186, 60, 0.06),
-              inset 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
-.pricing-card.featured:hover { 
-  transform: scale(1.05) translateY(-5px) translateZ(35px); 
+
+.pricing-card.featured {
+  border: none;
+  background: transparent;
+  /* Tarjeta destacada sobresale al frente dinámicamente con escala 2D para máxima nitidez */
+  transform: scale(1.03);
+  box-shadow: 0 12px 40px rgba(244, 186, 60, 0.06);
+}
+
+.pricing-card.featured:hover::before {
   background: rgba(255, 255, 255, 0.65);
   border-color: rgba(244, 186, 60, 0.85);
-  box-shadow: 0 35px 70px rgba(244, 186, 60, 0.22),
-              inset 0 0 0 1px rgba(255, 255, 255, 0.45);
 }
+
+.pricing-card.featured:hover { 
+  transform: scale(1.05) translateY(-5px) translateZ(35px); 
+  box-shadow: 0 35px 70px rgba(244, 186, 60, 0.22);
+}
+
 .pricing-card.featured:hover::after {
   background: rgba(244, 186, 60, 0.04);
   border-color: rgba(244, 186, 60, 0.25);
@@ -478,6 +535,20 @@ ul { list-style: none; }
   background: linear-gradient(135deg, #e9b342, #db9f2c);
 }
 
+.price-tag {
+  transform: translateZ(20px);
+}
+.bonus-box {
+  transform: translateZ(12px);
+  transition: var(--transition);
+}
+.overlap-card:hover .bonus-box {
+  transform: translateZ(20px) scale(1.02);
+}
+.card-description {
+  transform: translateZ(18px);
+}
+
 /* Service Cards (Asesoría/Capacitación/Soluciones) */
 .service-card h3, .course-card h3, .step-card h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 0.6rem; color: #111827; }
 .service-card p, .course-card p { font-size: 0.9rem; color: #4b5563; line-height: 1.5; }
@@ -493,19 +564,118 @@ ul { list-style: none; }
 .step-highlight { display: inline-block; margin-top: 1rem; font-size: 0.8rem; font-weight: 800; color: #3b82f6; }
 
 
-/* ===== SOCIAL PROOF ===== */
+/* ===== SEPARADOR BRAND RESPONSIVO DE CASOS DE ÉXITO ===== */
+.brand-separator {
+  width: 100%;
+  max-width: 1200px;
+  margin: 4rem auto 2rem;
+  padding: 0 24px;
+  overflow: hidden;
+}
+.separator-img {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 24px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+  border: 1px solid rgba(255,255,255,0.4);
+  display: block;
+  transition: var(--transition);
+}
+.separator-img:hover {
+  transform: scale(1.01);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.1);
+}
+
+/* ===== CASOS DE ÉXITO & TESTIMONIOS ===== */
 .social-proof { background: #fff; padding: 5rem 0; margin-top: 2rem; border-top: 1px solid #e5e7eb; }
 .section-title-wrap { text-align: center; margin-bottom: 3rem; }
 .small-tag { color: var(--dorado); font-size: 0.75rem; font-weight: 800; letter-spacing: 2px; }
 .section-title-wrap h2 { font-size: 2.2rem; font-weight: 800; color: #111827; margin-top: 0.5rem; }
 
 .logos-track-wrapper { overflow: hidden; }
-.logos-track { display: flex; gap: 3rem; animation: scroll-logos 25s linear infinite; width: max-content; }
-@keyframes scroll-logos { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-.logo-item {
-  width: 140px; height: 50px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  color: #9ca3af; font-weight: 800; font-size: 0.8rem; letter-spacing: 1px;
+.logos-track { display: flex; gap: 2rem; animation: scroll-logos 32s linear infinite; width: max-content; }
+@keyframes scroll-logos { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-50%, 0, 0); } }
+
+/* Cada tarjeta de testimonio dentro del carrusel */
+.logo-item.testimonial-card {
+  width: 330px;
+  height: auto;
+  min-height: 230px;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  padding: 1.6rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  color: inherit;
+  font-size: inherit;
+  letter-spacing: normal;
+  transition: var(--transition);
+  
+  /* Mantener plano estático */
+  transform: none;
+}
+.logo-item.testimonial-card:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(244, 186, 60, 0.45);
+  box-shadow: 0 16px 35px rgba(244, 186, 60, 0.08);
+}
+
+.stars-wrap {
+  color: #F4BA3C;
+  font-size: 0.85rem;
+  display: flex;
+  gap: 2px;
+}
+.testimonial-text {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #4b5563;
+  font-style: italic;
+  margin: 0;
+  text-align: left;
+  flex: 1;
+}
+.client-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+}
+.client-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.client-details {
+  text-align: left;
+}
+.client-details h5 {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 2px 0;
+}
+.client-details span {
+  font-size: 0.72rem;
+  color: var(--grey);
+  display: block;
 }
 
 /* ===== FOOTER ===== */

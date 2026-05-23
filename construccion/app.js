@@ -79,22 +79,30 @@ if (typeof QRCode !== 'undefined' && document.getElementById('qrCode')) {
 
 
 // --- 4. MODAL DE RESERVAS DINÁMICO (Firebase + Mercado Pago) ---
-const PROJECT_ID = 'TU-PROJECT-ID';
+const PROJECT_ID = 'moremkt-reservas';
 const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? `http://localhost:5001/${PROJECT_ID}/us-central1/api`
-    : `https://us-central1-${PROJECT_ID}.cloudfunctions.net/api`;
+    : `https://api-hchn7up7oq-uc.a.run.app`;
 
 const modal = document.getElementById('bookingModal');
 const modalOverlay = document.getElementById('modalOverlay');
 let modalService = '';
+let modalPrice = '';
 let selectedDate = null;
 let selectedTime = null;
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
 
-function openModal(service, detail) {
+function openModal(service, detail, price) {
   modalService = detail;
+  modalPrice = price || '$10.000 ARS';
   document.getElementById('modal-service-label').textContent = detail;
+  
+  // Actualizar precio en la vista del modal
+  const priceEl = document.getElementById('modal-sum-price');
+  if (priceEl) {
+    priceEl.textContent = modalPrice;
+  }
   
   // Limpiar form
   const form = document.getElementById('modal-booking-form');
@@ -282,6 +290,18 @@ function updateSummary() {
 
     if (btnPay) {
         btnPay.disabled = !(selectedDate && selectedTime && name && phone && email);
+        
+        // Si el precio es a convenir o gratis, cambiamos el texto del botón para que no mencione "Pagar"
+        const isFreeOrCustom = modalPrice.includes('A convenir') || 
+                               modalPrice.includes('convenir') || 
+                               modalPrice.includes('Gratis') || 
+                               modalPrice.includes('gratis');
+                               
+        if (isFreeOrCustom) {
+            btnPay.innerHTML = '📩 Confirmar y Agendar';
+        } else {
+            btnPay.innerHTML = '💳 Confirmar y Pagar';
+        }
     }
 }
 
@@ -496,3 +516,127 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// --- 8. LÓGICA DE DETALLES DEL PACK (POPUP DINÁMICO) ---
+const packDetails = {
+  'ventas-ya': {
+    title: 'Pack Inicial: Ventas Ya',
+    subtitle: 'La base sólida para activar tus conversiones y expandir tu negocio',
+    description: '¿Querés empezar a vender online, validar tu mercado y comprobar el poder de la pauta digital en tu negocio? Este plan es ideal para vos. Es el impulso inicial que necesitás para empezar a facturar de forma constante, optimizar tu presupuesto y sentar las bases de tu crecimiento.',
+    price: '$350.000 ARS / mes',
+    color: '#4B1D61',
+    features: [
+      '<strong>Estrategia en una plataforma publicitaria:</strong> Nos enfocamos al 100% en la red que mejor se adapte a tu público objetivo (a elegir entre Meta Ads, Google Ads o TikTok Ads).',
+      '<strong>Lanzamiento de 3 campañas activas:</strong> Diseñadas estratégicamente para atraer clientes calificados desde el primer día.',
+      '<strong>Soporte continuo y transparente:</strong> Comunicación directa y resolución de dudas vía WhatsApp para que nunca estés a ciegas.',
+      '<strong>Monitoreo y optimización constante:</strong> Feedback de rendimiento cada 3 días para ajustar lo que sea necesario y maximizar tu inversión.',
+      '<strong>Reporte mensual de resultados:</strong> Un análisis limpio, claro y sin tecnicismos para que veas exactamente cómo rinde tu dinero.'
+    ],
+    bonus: 'Te entregamos una hoja de ruta estratégica para tus primeros 3 meses de pauta, alineada 100% con los objetivos comerciales de tu marca de regalo.'
+  },
+  'posicionamiento': {
+    title: 'Pack de Posicionamiento',
+    subtitle: 'Estructura estratégica y automatización para marcas listas para escalar',
+    description: 'Ya sabés que el marketing digital funciona, ahora necesitás dar el siguiente paso: dejar de improvisar, organizar tu marca mes a mes y transformar tu comunidad en facturación real. Si crear contenido te está sacando tiempo vital para operar y hacer crecer tu negocio, nosotros nos encargamos de todo. Delegá la estrategia y recuperá el control.',
+    price: 'A convenir',
+    color: '#F4BA3C',
+    features: [
+      '<strong>Estrategia Multiplataforma (2 Ads Networks):</strong> Maximizamos tu alcance gestionando campañas en dos plataformas en simultáneo (a elegir entre Meta Ads, Google Ads o TikTok Ads).',
+      '<strong>Pauta publicitaria sin límite de campañas:</strong> Creamos y optimizamos todos los anuncios necesarios en base a tus objetivos comerciales, sin techos.',
+      '<strong>Gestión Integral de Redes (Community Management):</strong> Planificación, organización y publicación de contenido estratégico para mantener tu comunidad activa y comprometida.',
+      '<strong>Diseño de Identidad Estética:</strong> Creación de una línea visual coherente, profesional y alineada a la esencia de tu marca para destacar en el feed.',
+      '<strong>Producción de Contenido a la Medida:</strong> Generación de piezas y formatos específicos pensados exclusivamente para cumplir tus metas de posicionamiento y ventas.',
+      '<strong>Soporte y Optimización en Tiempo Real:</strong> Monitoreo diario con feedback de rendimiento cada 3 días; Canal de comunicación directo vía WhatsApp para resolver dudas al instante; Reporte mensual detallado con análisis de métricas clave y próximos pasos.'
+    ],
+    bonus: null
+  },
+  'producciones': {
+    title: 'Pack Producciones',
+    subtitle: 'La experiencia premium definitiva: contenido audiovisual de alta gama y pauta estratégica sin límites',
+    description: 'Comprendés perfectamente que tus redes sociales son la vidriera principal de tu negocio y que una estética impecable se traduce directamente en clientes de alto valor. Para marcas que no se conforman con lo básico y exigen una atención 100% personalizada, diseñamos esta solución integral. Nos encargamos desde la creación visual en el mundo real hasta la conversión en digital.',
+    price: 'A convenir',
+    color: '#1D3557',
+    features: [
+      '<strong>Producción de Contenido Audiovisual:</strong> Dirección de arte, fotografía de producto y rodaje/edición de video en alta calidad para que tu marca se vea costosa y profesional.',
+      '<strong>Estrategia Publicitaria Multiplataforma Avanzada:</strong> Gestión y optimización de campañas sin tope en las redes que dominen tu mercado (Meta Ads, Google Ads y TikTok Ads).',
+      '<strong>Diseño de Identidad Estética Exclusiva:</strong> Desarrollo visual a medida para garantizar un feed e historias con total coherencia, elegancia y magnetismo.',
+      '<strong>Gestión Integral y Community Management:</strong> Planificación, copywriting estratégico, organización de grilla y publicación diaria de los contenidos generados.',
+      '<strong>Atención y Soporte de Alta Prioridad:</strong> Canal de comunicación directa vía WhatsApp con respuestas prioritarias; Monitoreo diario con feedback estratégico de rendimiento cada 3 días; Reportes mensuales detallados con análisis de ROI y métricas clave de conversión.'
+    ],
+    bonus: null
+  }
+};
+
+const detailsModal = document.getElementById('detailsModal');
+const detailsOverlay = document.getElementById('detailsOverlay');
+
+function openDetailsModal(packKey) {
+  const pack = packDetails[packKey];
+  if (!pack) return;
+  
+  const contentEl = document.getElementById('details-modal-content');
+  if (!contentEl) return;
+  
+  let featuresHtml = pack.features.map(f => `
+    <li style="font-size: 0.88rem; color: #374151; margin-bottom: 0.8rem; display: flex; align-items: flex-start; gap: 10px; line-height: 1.45;">
+      <i class="ph ph-check-circle-fill" style="color: ${pack.color}; font-size: 1.1rem; flex-shrink: 0; margin-top: 2px;"></i>
+      <span>${f}</span>
+    </li>
+  `).join('');
+  
+  let bonusHtml = pack.bonus ? `
+    <div style="background: #fdf5df; border: 1px dashed #F4BA3C; border-radius: 12px; padding: 1rem; margin-bottom: 1.8rem; display: flex; gap: 10px; align-items: flex-start;">
+      <span style="font-size: 1.3rem; line-height: 1;">🔥</span>
+      <p style="font-size: 0.8rem; color: #78350f; line-height: 1.4; margin: 0; font-weight: 600;">
+        <strong>Bonus exclusivo:</strong> ${pack.bonus}
+      </p>
+    </div>
+  ` : '';
+
+  contentEl.innerHTML = `
+    <div style="text-align: left; padding: 0.5rem 0;">
+      <span style="color: ${pack.color}; font-size: 0.72rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; display: inline-block; margin-bottom: 0.5rem; background: ${pack.color}15; padding: 4px 10px; border-radius: 100px;">
+        MoreMKT Premium Pack
+      </span>
+      <h2 style="font-size: 1.8rem; font-weight: 900; color: #111827; margin-bottom: 0.4rem;">${pack.title}</h2>
+      <p style="font-size: 0.85rem; font-weight: 600; color: #6b7280; margin-bottom: 1.2rem; line-height: 1.35;">${pack.subtitle}</p>
+      
+      <p style="font-size: 0.88rem; color: #4b5563; line-height: 1.5; margin-bottom: 1.8rem; background: #f9fafb; padding: 1rem; border-radius: 12px; border: 1px solid #e5e7eb;">
+        ${pack.description}
+      </p>
+      
+      <h4 style="font-size: 0.9rem; font-weight: 800; color: #111827; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px;">¿Qué incluye este pack?</h4>
+      <ul style="list-style: none; margin-bottom: 1.8rem; padding: 0;">
+        ${featuresHtml}
+      </ul>
+      
+      ${bonusHtml}
+      
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: 1.2rem; border-top: 1px solid #e5e7eb; margin-top: 1.2rem;">
+        <div>
+          <span style="font-size: 0.75rem; color: #6b7280; display: block; font-weight: 500;">Inversión mensual</span>
+          <strong style="font-size: 1.4rem; font-weight: 900; color: #111827;">${pack.price}</strong>
+        </div>
+        <button class="btn-pay" style="margin-top: 0; width: auto; padding: 12px 30px; background: ${pack.color === '#F4BA3C' ? '#111827' : pack.color}; color: #fff;" onclick="closeDetailsModal(); openModal('publicidad', '${pack.title}', '${pack.price}')">
+          📩 Agendar Ahora
+        </button>
+      </div>
+    </div>
+  `;
+  
+  detailsModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetailsModal() {
+  detailsModal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+if (detailsOverlay) {
+  detailsOverlay.addEventListener('click', closeDetailsModal);
+}
+
+// Exponer globales
+window.openDetailsModal = openDetailsModal;
+window.closeDetailsModal = closeDetailsModal;
