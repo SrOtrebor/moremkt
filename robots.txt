@@ -13,3 +13,7 @@ Disallow: /firestore.rules
 # Permitir el frontend público
 Allow: /construccion/
 Allow: /
+
+# Sitemap — para Google y crawlers de IA
+Sitemap: https://morehdmkt.com/sitemap.xml
+
