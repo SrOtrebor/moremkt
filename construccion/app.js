@@ -23,7 +23,7 @@ tabBtns.forEach(btn => {
     
     // 3. Cambiar color del Hero Background
     if (heroBg && bgColor) {
-      heroBg.style.backgroundColor = bgColor;
+      heroBg.style.background = bgColor;
     }
   });
 });

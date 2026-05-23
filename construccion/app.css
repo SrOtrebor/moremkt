@@ -8,6 +8,7 @@
   --dorado: #e9b342;
   --carbon: #333333;
   --azul: #1D3557;
+  --sobremi-grad: linear-gradient(135deg, #2a113d, #4d236b, #1f0b2e);
   
   --grey: #6B7280;
   --off-white: #f3f3f5;
@@ -88,16 +89,18 @@ ul { list-style: none; }
 .tab-btn:hover { color: rgba(255,255,255,0.8); }
 
 /* Colores para el pseudo-elemento (el fondo real del trapecio) */
-.tab-btn[data-target="publicidad"]::before { background-color: var(--purpura); }
-.tab-btn[data-target="asesoria"]::before { background-color: var(--verde); }
-.tab-btn[data-target="capacitacion"]::before { background-color: var(--dorado); }
-.tab-btn[data-target="soluciones"]::before { background-color: var(--carbon); }
+.tab-btn[data-target="publicidad"]::before { background: var(--purpura); }
+.tab-btn[data-target="asesoria"]::before { background: var(--verde); }
+.tab-btn[data-target="capacitacion"]::before { background: var(--dorado); }
+.tab-btn[data-target="soluciones"]::before { background: var(--carbon); }
+.tab-btn[data-target="sobre-mi"]::before { background: var(--sobremi-grad); }
 
 /* Colores para el texto del botón */
 .tab-btn[data-target="publicidad"] { color: rgba(255,255,255,0.4); }
 .tab-btn[data-target="asesoria"] { color: rgba(255,255,255,0.4); }
 .tab-btn[data-target="capacitacion"] { color: rgba(255,255,255,0.4); }
 .tab-btn[data-target="soluciones"] { color: rgba(255,255,255,0.4); }
+.tab-btn[data-target="sobre-mi"] { color: rgba(255,255,255,0.4); }
 
 .tab-btn.active {
   height: 55px; /* Solapa activa es más alta */
@@ -117,9 +120,9 @@ ul { list-style: none; }
   position: absolute;
   top: 90px; left: 0; right: 0; /* Justo debajo del navbar */
   height: 600px; /* Cubre una buena porción antes del blanco */
-  background-color: var(--purpura); /* Empieza con el color default, JS lo cambia */
+  background: var(--purpura); /* Empieza con el color default, JS lo cambia */
   z-index: -1;
-  transition: background-color 0.5s ease-in-out;
+  transition: background 0.5s ease-in-out;
 }
 .hero-bg::after {
   content: "";
@@ -763,7 +766,8 @@ ul { list-style: none; }
   .tab-btn[data-target="publicidad"].active { background: var(--purpura); }
   .tab-btn[data-target="asesoria"].active { background: var(--verde); }
   .tab-btn[data-target="capacitacion"].active { background: var(--dorado); color: #1a1a1a !important; }
-  .tab-btn[data-target="soluciones"].active { background: var(--azul); }
+  .tab-btn[data-target="soluciones"].active { background: var(--carbon); }
+  .tab-btn[data-target="sobre-mi"].active { background: var(--sobremi-grad); }
 
   .hamburger { 
     display: block; 
