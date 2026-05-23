@@ -75,6 +75,7 @@ function initNavigation() {
 
             if (sectionId === 'blocks') loadBlocks();
             else if (sectionId === 'bookings') loadBookings();
+            else if (sectionId === 'leads') loadLeads();
         });
     });
 }
@@ -297,7 +298,7 @@ function renderBookings() {
     const tbody = document.getElementById('bookings-tbody');
 
     if (currentBookings.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-secondary);">No hay reservas</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-secondary);">No hay reservas</td></tr>';
         return;
     }
 
@@ -308,6 +309,9 @@ function renderBookings() {
             <td>${escapeHtml(booking.clientName)}</td>
             <td>${escapeHtml(booking.clientEmail)}</td>
             <td><span class="status-badge status-${escapeHtml(booking.status)}">${formatStatus(booking.status)}</span></td>
+            <td>
+                ${booking.status !== 'cancelled' ? `<button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.8rem;" onclick="cancelBooking('${escapeHtml(booking.id)}')">Cancelar</button>` : '-'}
+            </td>
         </tr>
     `).join('');
 }
@@ -361,3 +365,75 @@ function formatStatus(status) {
 }
 
 window.deleteBlock = deleteBlock;
+
+let currentLeads = [];
+
+async function loadLeads() {
+    try {
+        const token = localStorage.getItem('admin_token');
+        const response = await fetch(`${API_BASE}/admin/leads`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (handleUnauthorized(response)) return;
+        if (!response.ok) throw new Error('Error al cargar leads');
+
+        const data = await response.json();
+        currentLeads = data.leads;
+        renderLeads();
+
+    } catch (error) {
+        console.error('Error al cargar leads.');
+        alert('Error al cargar los leads.');
+    }
+}
+
+function renderLeads() {
+    const tbody = document.getElementById('leads-tbody');
+
+    if (currentLeads.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-secondary);">No hay leads</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = currentLeads.map(lead => {
+        let dateStr = '';
+        if (lead.createdAt && lead.createdAt._seconds) {
+            dateStr = new Date(lead.createdAt._seconds * 1000).toISOString().split('T')[0];
+        } else if (lead.createdAt) {
+            dateStr = new Date(lead.createdAt).toISOString().split('T')[0];
+        }
+        return `
+        <tr>
+            <td>${escapeHtml(formatDate(dateStr))}</td>
+            <td>${escapeHtml(lead.name)}</td>
+            <td>${escapeHtml(lead.phone)}</td>
+            <td>${escapeHtml(lead.email)}</td>
+            <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(lead.message)}">${escapeHtml(lead.message)}</td>
+        </tr>
+        `;
+    }).join('');
+}
+
+async function cancelBooking(bookingId) {
+    if (!confirm('¿Estás seguro de que quieres cancelar esta reserva?')) return;
+    
+    try {
+        const token = localStorage.getItem('admin_token');
+        const response = await fetch(`${API_BASE}/admin/bookings/${bookingId}/cancel`, {
+            method: 'PUT',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (handleUnauthorized(response)) return;
+        if (!response.ok) throw new Error('Error al cancelar reserva');
+
+        alert('✅ Reserva cancelada correctamente');
+        loadBookings();
+    } catch (error) {
+        console.error('Error al cancelar reserva.');
+        alert('❌ Error al cancelar la reserva.');
+    }
+}
+
+window.cancelBooking = cancelBooking;

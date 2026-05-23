@@ -7,6 +7,8 @@ const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
 const { MercadoPagoConfig, Preference, Payment } = require("mercadopago");
 const nodemailer = require("nodemailer");
+const { onRequest } = require("firebase-functions/v2/https");
+const { onSchedule } = require("firebase-functions/v2/scheduler");
 
 // Inicializar Firebase Admin
 admin.initializeApp();
@@ -28,17 +30,59 @@ const transporter = nodemailer.createTransport({
 const ADMIN_EMAIL = "hola@morehdmkt.com"; // Email de Moreliz
 const FROM_EMAIL = "MoreMKT <noresponder@morehdmkt.com>"; // Dominio verificado en Resend
 
-async function sendEmail(to, subject, html) {
+async function sendEmail(to, subject, html, icsString = null) {
     if (!process.env.RESEND_API_KEY) {
         console.log(`[sendEmail] Omitiendo correo a ${to}. Falta RESEND_API_KEY en .env`);
         return;
     }
     try {
-        await transporter.sendMail({ from: FROM_EMAIL, to, subject, html });
+        const mailOptions = { from: FROM_EMAIL, to, subject, html };
+        if (icsString) {
+            mailOptions.attachments = [{
+                filename: 'invite.ics',
+                content: icsString,
+                contentType: 'text/calendar'
+            }];
+        }
+        await transporter.sendMail(mailOptions);
         console.log(`[sendEmail] Correo enviado a ${to}`);
     } catch (error) {
         console.error("[sendEmail] Error al enviar correo:", error);
     }
+}
+
+// Generador de invitaciones de calendario (.ics)
+function generateIcsString(bookingId, clientName, dateStr, timeStr) {
+    // Asumimos hora de Argentina (-03:00)
+    const startDate = new Date(`${dateStr}T${timeStr}:00-03:00`);
+    const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // 1 hora
+    
+    const formatICSDate = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    
+    const startIcs = formatICSDate(startDate);
+    const endIcs = formatICSDate(endDate);
+    const nowIcs = formatICSDate(new Date());
+
+    return `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//MoreMKT//Reservas//ES
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VEVENT
+UID:${bookingId}@morehdmkt.com
+DTSTAMP:${nowIcs}
+DTSTART:${startIcs}
+DTEND:${endIcs}
+SUMMARY:Asesoría MoreMKT - ${clientName}
+DESCRIPTION:Reserva de asesoría de marketing con MoreMKT.\\n\\nCliente: ${clientName}\\nNos conectaremos en el horario pautado.
+STATUS:CONFIRMED
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Recordatorio de Asesoría MoreMKT
+TRIGGER:-PT1H
+END:VALARM
+END:VEVENT
+END:VCALENDAR`;
 }
 
 // ============================================
@@ -314,6 +358,42 @@ app.get("/admin/bookings", requireAuth, async (req, res) => {
     }
 });
 
+// NUEVO: Cancelar reserva
+app.put("/admin/bookings/:id/cancel", requireAuth, async (req, res) => {
+    try {
+        const bookingId = req.params.id;
+        if (!bookingId || bookingId.length > 50 || !/^[a-zA-Z0-9]+$/.test(bookingId)) {
+            return res.status(400).json({ error: "ID de reserva inválido" });
+        }
+        
+        const bookingRef = db.collection("bookings").doc(bookingId);
+        const bookingDoc = await bookingRef.get();
+        
+        if (!bookingDoc.exists) {
+            return res.status(404).json({ error: "Reserva no encontrada" });
+        }
+        
+        await bookingRef.update({ 
+            status: "cancelled",
+            cancelledAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+        
+        const bData = bookingDoc.data();
+        if (bData.status !== "cancelled") {
+            await sendEmail(
+                bData.clientEmail,
+                "Aviso de Cancelación - Asesoría MoreMKT",
+                `<p>Hola ${bData.clientName},</p><p>Te informamos que tu reserva del ${bData.date} a las ${bData.time} ha sido cancelada.</p><p>Por favor contáctate con nosotros respondiendo este correo si necesitas reprogramar o conocer el motivo.</p>`
+            );
+        }
+
+        return res.status(200).json({ success: true });
+    } catch (error) {
+        console.error("[admin/bookings/cancel] Error interno.");
+        return res.status(500).json({ error: "Error al cancelar reserva" });
+    }
+});
+
 // NUEVO: Ver leads del formulario de diagnóstico
 app.get("/admin/leads", requireAuth, async (req, res) => {
     try {
@@ -512,6 +592,7 @@ app.post("/mercadopagoWebhook", async (req, res) => {
                     });
                     
                     const bData = bookingDoc.data();
+                    const icsString = generateIcsString(bookingDoc.id, bData.clientName, bData.date, bData.time);
                     
                     // Correo al cliente
                     await sendEmail(
@@ -521,7 +602,9 @@ app.post("/mercadopagoWebhook", async (req, res) => {
                          <p>Tu pago ha sido procesado con éxito y tu reserva está confirmada.</p>
                          <p><b>Fecha:</b> ${bData.date}<br><b>Hora:</b> ${bData.time}</p>
                          <p>Nos pondremos en contacto contigo pronto con el enlace de conexión.</p>
-                         <p>Saludos,<br>El equipo de MoreMKT</p>`
+                         <p><b>Nota:</b> Te adjuntamos una invitación de calendario para que puedas agregar la cita a tu Google Calendar.</p>
+                         <p>Saludos,<br>El equipo de MoreMKT</p>`,
+                         icsString
                     );
                     
                     // Correo al admin
@@ -532,7 +615,8 @@ app.post("/mercadopagoWebhook", async (req, res) => {
                          <p><b>Cliente:</b> ${bData.clientName} (${bData.clientEmail})</p>
                          <p><b>Teléfono:</b> ${bData.clientPhone || 'No proporcionado'}</p>
                          <p><b>Fecha:</b> ${bData.date}<br><b>Hora:</b> ${bData.time}</p>
-                         <p><b>Monto:</b> $${bData.price}</p>`
+                         <p><b>Monto:</b> $${bData.price}</p>`,
+                         icsString
                     );
                 }
             }
@@ -591,6 +675,70 @@ app.post("/saveLead", leadLimiter, async (req, res) => {
     }
 });
 
-const { onRequest } = require("firebase-functions/v2/https");
 // cors: false porque lo manejamos manualmente con middleware propio
 exports.api = onRequest({ cors: false, maxInstances: 10 }, app);
+
+// ============================================
+// CRON JOB: RECORDATORIOS 24HS
+// Se ejecuta cada hora buscando reservas programadas para mañana
+// ============================================
+exports.sendReminders = onSchedule("0 * * * *", async (event) => {
+    try {
+        const now = new Date();
+        const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+        
+        // Ajuste horario para sacar la fecha local (Argentina UTC-3)
+        const tomorrowAR = new Date(tomorrow.getTime() - 3 * 60 * 60 * 1000);
+        const targetDate = tomorrowAR.toISOString().split("T")[0];
+
+        // Buscar reservas confirmadas para esa fecha
+        const snapshot = await db.collection("bookings")
+            .where("date", "==", targetDate)
+            .where("status", "==", "confirmed")
+            .get();
+
+        if (snapshot.empty) {
+            console.log(`[sendReminders] No hay reservas confirmadas para el ${targetDate}`);
+            return;
+        }
+
+        const nowHours = now.getUTCHours() - 3;
+        const currentHour = nowHours < 0 ? nowHours + 24 : nowHours;
+
+        const batch = db.batch();
+        let sentCount = 0;
+
+        for (const doc of snapshot.docs) {
+            const data = doc.data();
+            
+            // Si ya se le envió recordatorio, saltar
+            if (data.reminderSent) continue;
+            
+            // Verificar si la hora de la reserva coincide con la hora actual (+/- 1 hr)
+            const [bookingHour] = data.time.split(":").map(Number);
+            if (bookingHour === currentHour || bookingHour === currentHour + 1) {
+                
+                await sendEmail(
+                    data.clientEmail,
+                    "⏰ Recordatorio: Tu asesoría con MoreMKT es mañana",
+                    `<h2>¡Hola ${data.clientName}!</h2>
+                     <p>Te escribimos para recordarte que mañana <b>${data.date} a las ${data.time}</b> tenemos nuestra sesión de asesoría.</p>
+                     <p>Si tienes cualquier duda o necesitas reprogramar, por favor escríbenos respondiendo a este correo.</p>
+                     <p>¡Nos vemos mañana!</p>`
+                );
+
+                // Marcar como enviado en la DB
+                batch.update(doc.ref, { reminderSent: true });
+                sentCount++;
+            }
+        }
+
+        if (sentCount > 0) {
+            await batch.commit();
+        }
+        
+        console.log(`[sendReminders] Proceso finalizado. Recordatorios enviados: ${sentCount}`);
+    } catch (error) {
+        console.error("[sendReminders] Error en el cron job:", error);
+    }
+});

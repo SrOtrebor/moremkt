@@ -36,6 +36,10 @@
                     <span class="icon">💰</span>
                     <span>Precios</span>
                 </a>
+                <a href="#" class="nav-item" data-section="leads">
+                    <span class="icon">📬</span>
+                    <span>Leads</span>
+                </a>
             </nav>
 
             <div class="sidebar-footer">
@@ -278,9 +282,41 @@
                                     <th>Cliente</th>
                                     <th>Email</th>
                                     <th>Estado</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="bookings-tbody">
+                                <tr>
+                                    <td colspan="6" style="text-align: center; color: var(--text-secondary);">
+                                        Cargando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección: Ver Leads -->
+            <section id="section-leads" class="section">
+                <div class="page-header">
+                    <h1>Leads de Diagnóstico</h1>
+                    <p>Personas que completaron el formulario de Soluciones</p>
+                </div>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table id="leads-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Nombre</th>
+                                    <th>Teléfono</th>
+                                    <th>Email</th>
+                                    <th>Mensaje</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leads-tbody">
                                 <tr>
                                     <td colspan="5" style="text-align: center; color: var(--text-secondary);">
                                         Cargando...
