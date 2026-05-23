@@ -91,6 +91,18 @@ let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
 
 function openModal(service, detail, price) {
+  // GTM Event: begin_checkout
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'begin_checkout',
+    ecommerce: {
+      items: [{
+        item_name: detail,
+        price: price
+      }]
+    }
+  });
+
   modalService = detail;
   modalPrice = price || '$70.000 ARS';
   document.getElementById('modal-service-label').textContent = detail;
@@ -408,6 +420,20 @@ document.addEventListener('DOMContentLoaded', () => {
             message = 'Tu reserva ha sido registrada correctamente. Te enviamos un correo con los detalles de la sesión y el enlace de acceso.';
             typeClass = 'approved';
             icon = '✓';
+
+            // GTM Event: purchase
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+              event: 'purchase',
+              ecommerce: {
+                transaction_id: params.get('payment_id') || 'mp_' + Date.now(),
+                value: 70000, // Precio de referencia
+                currency: 'ARS',
+                items: [{
+                  item_name: 'Reserva Asesoría'
+                }]
+              }
+            });
         } else if (status === 'pending') {
             title = 'Pago en Proceso';
             message = 'Tu pago está pendiente de acreditación. En cuanto se confirme, te enviaremos el mail con la confirmación de la cita.';
@@ -699,6 +725,17 @@ async function submitSolucionesForm(e) {
     alert('Por favor completa todos los campos obligatorios.');
     return;
   }
+
+  // GTM Event: generate_lead
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'generate_lead',
+    form_id: 'soluciones_form',
+    user_data: {
+      email_address: email,
+      phone_number: phone
+    }
+  });
   
   const submitBtn = document.querySelector('#soluciones-form button[type="submit"]');
   if (submitBtn) {
