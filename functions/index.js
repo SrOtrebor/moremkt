@@ -516,9 +516,29 @@ app.post("/createBooking", bookingLimiter, async (req, res) => {
             // Modo prueba: confirmar directo si no hay MP configurado
             await bookingRef.update({ status: "confirmed" });
             
-            // Enviar correos de prueba
-            await sendEmail(email, "¡Reserva Confirmada! (PRUEBA)", `<p>Hola ${name}, tu reserva para el <b>${date} a las ${time}</b> está confirmada.</p>`);
-            await sendEmail(ADMIN_EMAIL, "Nueva Reserva (PRUEBA)", `<p>Nueva reserva de ${name} (${email}) para el <b>${date} a las ${time}</b>.</p>`);
+            const icsString = generateIcsString(bookingRef.id, name, date, time);
+            
+            // Correo al cliente
+            await sendEmail(
+                email, 
+                "¡Reserva Confirmada! (PRUEBA)", 
+                `<h2>¡Hola ${name}!</h2>
+                 <p>Tu reserva de prueba está confirmada.</p>
+                 <p><b>Fecha:</b> ${date}<br><b>Hora:</b> ${time}</p>
+                 <p><b>Nota:</b> Te adjuntamos una invitación de calendario para que puedas agregar la cita a tu Google Calendar.</p>
+                 <p>Saludos,<br>El equipo de MoreMKT</p>`,
+                 icsString
+            );
+            
+            // Correo al admin
+            await sendEmail(
+                ADMIN_EMAIL, 
+                "🟢 Nueva Reserva (PRUEBA)", 
+                `<h2>¡Nueva Asesoría de Prueba!</h2>
+                 <p><b>Cliente:</b> ${name} (${email})</p>
+                 <p><b>Fecha:</b> ${date}<br><b>Hora:</b> ${time}</p>`,
+                 icsString
+            );
             
             return res.status(200).json({ init_point: "/construccion/index.html?status=approved" });
         }
