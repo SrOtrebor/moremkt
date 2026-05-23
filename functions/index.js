@@ -6,10 +6,40 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
 const { MercadoPagoConfig, Preference, Payment } = require("mercadopago");
+const nodemailer = require("nodemailer");
 
 // Inicializar Firebase Admin
 admin.initializeApp();
 const db = admin.firestore();
+
+// ============================================
+// CONFIGURACIÓN DE NODEMAILER (RESEND)
+// ============================================
+const transporter = nodemailer.createTransport({
+    host: "smtp.resend.com",
+    port: 465,
+    secure: true,
+    auth: {
+        user: "resend",
+        pass: process.env.RESEND_API_KEY || "dummy"
+    }
+});
+
+const ADMIN_EMAIL = "hola@morehdmkt.com"; // Email de Moreliz
+const FROM_EMAIL = "MoreMKT <noresponder@morehdmkt.com>"; // Dominio verificado en Resend
+
+async function sendEmail(to, subject, html) {
+    if (!process.env.RESEND_API_KEY) {
+        console.log(`[sendEmail] Omitiendo correo a ${to}. Falta RESEND_API_KEY en .env`);
+        return;
+    }
+    try {
+        await transporter.sendMail({ from: FROM_EMAIL, to, subject, html });
+        console.log(`[sendEmail] Correo enviado a ${to}`);
+    } catch (error) {
+        console.error("[sendEmail] Error al enviar correo:", error);
+    }
+}
 
 // ============================================
 // SEGURIDAD C-01: JWT_SECRET SIN FALLBACK
@@ -405,6 +435,11 @@ app.post("/createBooking", bookingLimiter, async (req, res) => {
         if (!process.env.MP_ACCESS_TOKEN) {
             // Modo prueba: confirmar directo si no hay MP configurado
             await bookingRef.update({ status: "confirmed" });
+            
+            // Enviar correos de prueba
+            await sendEmail(email, "¡Reserva Confirmada! (PRUEBA)", `<p>Hola ${name}, tu reserva para el <b>${date} a las ${time}</b> está confirmada.</p>`);
+            await sendEmail(ADMIN_EMAIL, "Nueva Reserva (PRUEBA)", `<p>Nueva reserva de ${name} (${email}) para el <b>${date} a las ${time}</b>.</p>`);
+            
             return res.status(200).json({ init_point: "/construccion/index.html?status=approved" });
         }
 
@@ -475,6 +510,30 @@ app.post("/mercadopagoWebhook", async (req, res) => {
                         paymentStatus: paymentData.status,
                         confirmedAt: admin.firestore.FieldValue.serverTimestamp()
                     });
+                    
+                    const bData = bookingDoc.data();
+                    
+                    // Correo al cliente
+                    await sendEmail(
+                        bData.clientEmail, 
+                        "¡Tu Asesoría en MoreMKT está Confirmada!", 
+                        `<h2>¡Hola ${bData.clientName}!</h2>
+                         <p>Tu pago ha sido procesado con éxito y tu reserva está confirmada.</p>
+                         <p><b>Fecha:</b> ${bData.date}<br><b>Hora:</b> ${bData.time}</p>
+                         <p>Nos pondremos en contacto contigo pronto con el enlace de conexión.</p>
+                         <p>Saludos,<br>El equipo de MoreMKT</p>`
+                    );
+                    
+                    // Correo al admin
+                    await sendEmail(
+                        ADMIN_EMAIL, 
+                        "🟢 Nueva Reserva Confirmada (Pagada)", 
+                        `<h2>¡Nueva Asesoría Pagada!</h2>
+                         <p><b>Cliente:</b> ${bData.clientName} (${bData.clientEmail})</p>
+                         <p><b>Teléfono:</b> ${bData.clientPhone || 'No proporcionado'}</p>
+                         <p><b>Fecha:</b> ${bData.date}<br><b>Hora:</b> ${bData.time}</p>
+                         <p><b>Monto:</b> $${bData.price}</p>`
+                    );
                 }
             }
         }
@@ -511,6 +570,19 @@ app.post("/saveLead", leadLimiter, async (req, res) => {
             status: "nuevo",
             createdAt: admin.firestore.FieldValue.serverTimestamp()
         });
+
+        // Notificar al admin por correo
+        await sendEmail(
+            ADMIN_EMAIL,
+            "🚀 Nuevo Lead - Diagnóstico Online",
+            `<h2>Nuevo Solicitante de Diagnóstico</h2>
+             <p><b>Nombre:</b> ${name}</p>
+             <p><b>Email:</b> ${email}</p>
+             <p><b>Teléfono:</b> ${phone}</p>
+             <p><b>Mensaje:</b> ${message}</p>
+             <br>
+             <p><a href="https://wa.me/${phone.replace(/\D/g, '')}" style="background-color:#25D366;color:white;padding:10px 15px;text-decoration:none;border-radius:5px;">Contactar por WhatsApp</a></p>`
+        );
 
         return res.status(201).json({ success: true });
     } catch (error) {
