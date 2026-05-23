@@ -1,0 +1,12 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // REGLA GLOBAL: Bloquear todo acceso directo desde el cliente.
+    // Solo el Admin SDK del backend (Cloud Functions) puede leer/escribir.
+    // Esto previene que cualquier usuario acceda directamente a Firestore
+    // desde el navegador, incluso si consigue la configuración de Firebase.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,15 @@
+User-agent: *
+
+# Bloquear el panel de administración de indexadores de búsqueda
+Disallow: /admin/
+Disallow: /admin
+
+# Bloquear archivos internos
+Disallow: /functions/
+Disallow: /.firebaserc
+Disallow: /firebase.json
+Disallow: /firestore.rules
+
+# Permitir el frontend público
+Allow: /construccion/
+Allow: /

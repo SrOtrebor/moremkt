@@ -687,7 +687,7 @@ if (solucionesOverlay) {
   solucionesOverlay.addEventListener('click', closeSolucionesModal);
 }
 
-function submitSolucionesForm(e) {
+async function submitSolucionesForm(e) {
   e.preventDefault();
   
   const name = document.getElementById('sol-name').value.trim();
@@ -700,12 +700,36 @@ function submitSolucionesForm(e) {
     return;
   }
   
+  const submitBtn = document.querySelector('#soluciones-form button[type="submit"]');
+  if (submitBtn) {
+    submitBtn.textContent = 'Enviando...';
+    submitBtn.disabled = true;
+  }
+
+  // Guardar el lead en la base de datos (respaldo seguro)
+  // Si el usuario cierra WhatsApp sin enviar, el lead no se pierde.
+  try {
+    await fetch(`${API_URL}/saveLead`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, email, message })
+    });
+  } catch (err) {
+    // Silent fail — no bloqueamos la experiencia del usuario
+    console.warn('No se pudo guardar el lead en la base de datos.');
+  }
+  
   const waText = encodeURIComponent(
     `¡Hola MoreMKT!\nQuiero solicitar un *Diagnóstico Online Gratis*:\n\n👤 *Nombre:* ${name}\n📱 *WhatsApp:* ${phone}\n📧 *Email:* ${email}\n💬 *Consulta/Tema:* ${message}`
   );
   
   closeSolucionesModal();
   window.open(`https://wa.me/5491176426155?text=${waText}`, '_blank');
+  
+  if (submitBtn) {
+    submitBtn.textContent = '📩 Solicitar Diagnóstico';
+    submitBtn.disabled = false;
+  }
 }
 
 // Exponer globales

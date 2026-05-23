@@ -1,5 +1,4 @@
 // Configuración de API
-// REEMPLAZAR 'TU-PROJECT-ID' con el ID de tu proyecto de Firebase
 const PROJECT_ID = 'moremkt-reservas';
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? `http://localhost:5001/${PROJECT_ID}/us-central1/api`
@@ -8,6 +7,32 @@ const API_BASE = window.location.hostname === 'localhost' || window.location.hos
 let currentConfig = null;
 let currentBlocks = [];
 let currentBookings = [];
+
+// ============================================
+// SEGURIDAD: Escape de HTML para prevenir XSS
+// ============================================
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '-';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+// ============================================
+// SEGURIDAD: Manejo de sesión expirada (401)
+// ============================================
+function handleUnauthorized(response) {
+    if (response.status === 401) {
+        localStorage.removeItem('admin_token');
+        localStorage.removeItem('admin_user');
+        window.location.href = 'login.html';
+        return true;
+    }
+    return false;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('admin_token');
@@ -61,6 +86,7 @@ async function loadConfig() {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
+        if (handleUnauthorized(response)) return;
         if (!response.ok) throw new Error('Error al cargar configuración');
 
         const data = await response.json();
@@ -73,8 +99,8 @@ async function loadConfig() {
         renderBlocks();
 
     } catch (error) {
-        console.error('Error:', error);
-        alert('Error al cargar configuración: ' + error.message);
+        console.error('Error al cargar configuración.');
+        alert('Error al cargar configuración. Recargá la página.');
     }
 }
 
@@ -157,14 +183,15 @@ async function saveAvailability() {
             body: JSON.stringify(configData)
         });
 
+        if (handleUnauthorized(response)) return;
         if (!response.ok) throw new Error('Error al guardar');
 
         alert('✅ Configuración guardada correctamente');
         loadConfig();
 
     } catch (error) {
-        console.error('Error:', error);
-        alert('❌ Error al guardar: ' + error.message);
+        console.error('Error al guardar disponibilidad.');
+        alert('❌ Error al guardar la configuración.');
     }
 }
 
@@ -187,6 +214,7 @@ async function createBlock() {
             body: JSON.stringify(blockData)
         });
 
+        if (handleUnauthorized(response)) return;
         if (!response.ok) throw new Error('Error al crear bloqueo');
 
         alert('✅ Horario bloqueado correctamente');
@@ -194,8 +222,8 @@ async function createBlock() {
         loadConfig();
 
     } catch (error) {
-        console.error('Error:', error);
-        alert('❌ Error: ' + error.message);
+        console.error('Error al crear bloqueo.');
+        alert('❌ Error al crear el bloqueo.');
     }
 }
 
@@ -209,14 +237,15 @@ async function deleteBlock(blockId) {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
+        if (handleUnauthorized(response)) return;
         if (!response.ok) throw new Error('Error al eliminar');
 
         alert('✅ Bloqueo eliminado');
         loadConfig();
 
     } catch (error) {
-        console.error('Error:', error);
-        alert('❌ Error: ' + error.message);
+        console.error('Error al eliminar bloqueo.');
+        alert('❌ Error al eliminar el bloqueo.');
     }
 }
 
@@ -230,11 +259,11 @@ function renderBlocks() {
 
     tbody.innerHTML = currentBlocks.map(block => `
         <tr>
-            <td>${formatDate(block.date)}</td>
-            <td>${block.startTime} - ${block.endTime}</td>
-            <td>${block.reason || '-'}</td>
+            <td>${escapeHtml(formatDate(block.date))}</td>
+            <td>${escapeHtml(block.startTime)} - ${escapeHtml(block.endTime)}</td>
+            <td>${escapeHtml(block.reason)}</td>
             <td>
-                <button class="btn btn-danger" onclick="deleteBlock('${block.id}')">Eliminar</button>
+                <button class="btn btn-danger" onclick="deleteBlock('${escapeHtml(block.id)}')">Eliminar</button>
             </td>
         </tr>
     `).join('');
@@ -251,6 +280,7 @@ async function loadBookings() {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
+        if (handleUnauthorized(response)) return;
         if (!response.ok) throw new Error('Error al cargar reservas');
 
         const data = await response.json();
@@ -258,8 +288,8 @@ async function loadBookings() {
         renderBookings();
 
     } catch (error) {
-        console.error('Error:', error);
-        alert('Error al cargar reservas: ' + error.message);
+        console.error('Error al cargar reservas.');
+        alert('Error al cargar las reservas. Recargá la página.');
     }
 }
 
@@ -273,11 +303,11 @@ function renderBookings() {
 
     tbody.innerHTML = currentBookings.map(booking => `
         <tr>
-            <td>${formatDate(booking.date)}</td>
-            <td>${booking.time}</td>
-            <td>${booking.clientName || '-'}</td>
-            <td>${booking.clientEmail || '-'}</td>
-            <td><span class="status-badge status-${booking.status}">${formatStatus(booking.status)}</span></td>
+            <td>${escapeHtml(formatDate(booking.date))}</td>
+            <td>${escapeHtml(booking.time)}</td>
+            <td>${escapeHtml(booking.clientName)}</td>
+            <td>${escapeHtml(booking.clientEmail)}</td>
+            <td><span class="status-badge status-${escapeHtml(booking.status)}">${formatStatus(booking.status)}</span></td>
         </tr>
     `).join('');
 }
@@ -287,6 +317,11 @@ async function savePricing() {
         const pricingData = {
             individual: parseInt(document.getElementById('price-individual').value)
         };
+
+        if (isNaN(pricingData.individual) || pricingData.individual < 0) {
+            alert('❌ Ingresá un precio válido.');
+            return;
+        }
 
         const token = localStorage.getItem('admin_token');
         const response = await fetch(`${API_BASE}/admin/config/pricing`, {
@@ -298,14 +333,15 @@ async function savePricing() {
             body: JSON.stringify(pricingData)
         });
 
+        if (handleUnauthorized(response)) return;
         if (!response.ok) throw new Error('Error al guardar precios');
 
         alert('✅ Precios actualizados correctamente');
         loadConfig();
 
     } catch (error) {
-        console.error('Error:', error);
-        alert('❌ Error: ' + error.message);
+        console.error('Error al guardar precios.');
+        alert('❌ Error al actualizar los precios.');
     }
 }
 
