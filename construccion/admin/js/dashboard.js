@@ -104,6 +104,10 @@ function loadAvailabilityForm(config) {
 
 function loadPricingForm(pricing) {
     document.getElementById('price-individual').value = pricing.individual || 10000;
+    const ventasYaInput = document.getElementById('price-ventas-ya');
+    if (ventasYaInput) {
+        ventasYaInput.value = pricing.ventas_ya || 350000;
+    }
 }
 
 function initForms() {
@@ -287,6 +291,10 @@ async function savePricing() {
         const pricingData = {
             individual: parseInt(document.getElementById('price-individual').value)
         };
+        const ventasYaInput = document.getElementById('price-ventas-ya');
+        if (ventasYaInput) {
+            pricingData.ventas_ya = parseInt(ventasYaInput.value);
+        }
 
         const token = localStorage.getItem('admin_token');
         const response = await fetch(`${API_BASE}/admin/config/pricing`, {
