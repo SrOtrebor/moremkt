@@ -475,11 +475,31 @@ function generateTimeSlots(startTime, endTime, duration) {
 }
 
 // ============================================
+// PUBLIC: OBTENER PRECIOS
+// ============================================
+app.get("/pricing", async (req, res) => {
+    try {
+        const pricingDoc = await db.collection("pricing_config").doc("default").get();
+        if (!pricingDoc.exists) {
+            return res.status(200).json({ individual: 70000, ventas_ya: 350000 });
+        }
+        const data = pricingDoc.data();
+        return res.status(200).json({ 
+            individual: data.individual || 70000, 
+            ventas_ya: data.ventas_ya || 350000 
+        });
+    } catch (error) {
+        console.error("[getPricing] Error interno.");
+        return res.status(500).json({ error: "Error al obtener precios" });
+    }
+});
+
+// ============================================
 // PUBLIC: CREAR RESERVA
 // ============================================
 app.post("/createBooking", bookingLimiter, async (req, res) => {
     try {
-        const { name, email, phone, date, time } = req.body;
+        const { name, email, phone, date, time, service } = req.body;
         if (!name || !email || !date || !time) return res.status(400).json({ error: "Faltan datos obligatorios" });
 
         // Validaciones de seguridad A-05
@@ -501,12 +521,21 @@ app.post("/createBooking", bookingLimiter, async (req, res) => {
         if (!existing.empty) return res.status(400).json({ error: "Horario no disponible" });
 
         const pricingDoc = await db.collection("pricing_config").doc("default").get();
-        const price = pricingDoc.exists ? (pricingDoc.data().individual || 70000) : 70000;
+        const configData = pricingDoc.exists ? pricingDoc.data() : {};
+        
+        let price = configData.individual || 70000;
+        let titleService = "Reserva Asesoría";
+        
+        if (service === "ventas_ya") {
+            price = configData.ventas_ya || 350000;
+            titleService = "Pack Inicial: Ventas Ya";
+        }
 
         const bookingRef = await db.collection("bookings").add({
             clientName: sanitizeString(name, 150),
             clientEmail: sanitizeString(email, 254),
             clientPhone: sanitizeString(phone || "", 30),
+            service: sanitizeString(service || "asesoria", 50),
             date, time, price,
             status: "pending_payment",
             createdAt: admin.firestore.FieldValue.serverTimestamp()
@@ -554,7 +583,7 @@ app.post("/createBooking", bookingLimiter, async (req, res) => {
             body: {
                 items: [{
                     id: bookingRef.id,
-                    title: `Reserva Asesoría - ${date} ${time}`,
+                    title: `${titleService} - ${date} ${time}`,
                     quantity: 1,
                     unit_price: price,
                     currency_id: "ARS"
@@ -570,7 +599,7 @@ app.post("/createBooking", bookingLimiter, async (req, res) => {
                     pending: `${baseUrl}/construccion/index.html?status=pending`
                 },
                 auto_return: "approved",
-                notification_url: `${process.env.FUNCTIONS_URL}/api/mercadopagoWebhook`
+                notification_url: `${process.env.FUNCTIONS_URL}/mercadopagoWebhook`
             }
         });
 

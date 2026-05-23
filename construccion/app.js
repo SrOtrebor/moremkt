@@ -81,6 +81,35 @@ const API_URL = window.location.hostname === 'localhost' || window.location.host
     ? `http://localhost:5001/${PROJECT_ID}/us-central1/api`
     : `https://api-hchn7up7oq-uc.a.run.app`;
 
+// Precios Dinámicos
+let globalPricing = { individual: 70000, ventas_ya: 350000 };
+
+async function fetchPricing() {
+    try {
+        const res = await fetch(`${API_URL}/pricing`);
+        if (res.ok) {
+            const data = await res.json();
+            globalPricing = data;
+            
+            // Actualizar vista frontend
+            const priceVentasYa = document.getElementById('price-display-ventas-ya');
+            if (priceVentasYa) priceVentasYa.textContent = `$${data.ventas_ya.toLocaleString('es-AR')}`;
+            
+            const btnVentasYa = document.getElementById('btn-agendar-ventas-ya');
+            if (btnVentasYa) btnVentasYa.setAttribute('onclick', `openModal('publicidad', 'Pack Inicial: Ventas Ya', '$${data.ventas_ya.toLocaleString('es-AR')} ARS / mes')`);
+            
+            const btnAsesoria = document.getElementById('btn-agendar-asesoria');
+            if (btnAsesoria) {
+                btnAsesoria.innerHTML = `Agendar Sesión ($${data.individual.toLocaleString('es-AR')})`;
+                btnAsesoria.setAttribute('onclick', `openModal('asesoria', 'Consultoría Estratégica', '$${data.individual.toLocaleString('es-AR')} ARS')`);
+            }
+        }
+    } catch (e) {
+        console.warn('Error al obtener precios dinámicos', e);
+    }
+}
+document.addEventListener('DOMContentLoaded', fetchPricing);
+
 const modal = document.getElementById('bookingModal');
 const modalOverlay = document.getElementById('modalOverlay');
 let modalService = '';
@@ -346,7 +375,7 @@ async function submitModalBooking() {
       phone: phone,
       date: dateStr,
       time: selectedTime,
-      service: modalService
+      service: modalService === 'Pack Inicial: Ventas Ya' ? 'ventas_ya' : 'asesoria'
   };
 
   const btnPay = document.getElementById('modal-btn-pay');

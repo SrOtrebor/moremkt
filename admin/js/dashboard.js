@@ -130,7 +130,11 @@ function loadAvailabilityForm(config) {
 }
 
 function loadPricingForm(pricing) {
-    document.getElementById('price-individual').value = pricing.individual || 10000;
+    document.getElementById('price-individual').value = pricing.individual || 70000;
+    const ventasYaInput = document.getElementById('price-ventas-ya');
+    if (ventasYaInput) {
+        ventasYaInput.value = pricing.ventas_ya || 350000;
+    }
 }
 
 function initForms() {
@@ -321,8 +325,14 @@ async function savePricing() {
         const pricingData = {
             individual: parseInt(document.getElementById('price-individual').value)
         };
+        
+        const ventasYaInput = document.getElementById('price-ventas-ya');
+        if (ventasYaInput) {
+            pricingData.ventas_ya = parseInt(ventasYaInput.value);
+        }
 
-        if (isNaN(pricingData.individual) || pricingData.individual < 0) {
+        if (isNaN(pricingData.individual) || pricingData.individual < 0 || 
+            (pricingData.ventas_ya !== undefined && (isNaN(pricingData.ventas_ya) || pricingData.ventas_ya < 0))) {
             alert('❌ Ingresá un precio válido.');
             return;
         }

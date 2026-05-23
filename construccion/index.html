@@ -446,12 +446,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="subtitle">Pack Inicial</p>
         
         <div class="price-tag" style="margin-top: auto; margin-bottom: 1rem;">
-          <span style="font-size: 1.8rem; font-weight: 900; color: #111827;">$350.000</span>
+          <span id="price-display-ventas-ya" style="font-size: 1.8rem; font-weight: 900; color: #111827;">$350.000</span>
           <span style="font-size: 0.85rem; color: var(--grey); font-weight: 500;">/ mes</span>
         </div>
 
         <button class="btn-details" onclick="openDetailsModal('ventas-ya')">Ver detalles del pack →</button>
-        <button class="btn-card" onclick="openModal('publicidad','Pack Inicial: Ventas Ya', '$350.000 ARS / mes')">Agendar</button>
+        <button id="btn-agendar-ventas-ya" class="btn-card" onclick="openModal('publicidad','Pack Inicial: Ventas Ya', '$350.000 ARS / mes')">Agendar</button>
       </div>
 
       <!-- CARD 2: PACK DE POSICIONAMIENTO -->
@@ -503,7 +503,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <span class="badge" style="color:#10B981;">CONSULTORÍA</span>
         <h1>Decisiones basadas<br>en datos reales.</h1>
         <p>Sesiones técnicas de marketing, embudos y procesos. Analizamos tu negocio para optimizar tu inversión y maximizar las ventas.</p>
-        <button class="btn-hero" style="background:#10B981; color:#fff;" onclick="openModal('asesoria','Consultoría Estratégica', '$70.000 ARS')">Agendar Sesión (MP)</button>
+        <button id="btn-agendar-asesoria" class="btn-hero" style="background:#10B981; color:#fff;" onclick="openModal('asesoria','Consultoría Estratégica', '$70.000 ARS')">Agendar Sesión (MP)</button>
       </div>
       <div class="hero-image">
         <img src="Fotos/Asesorias.png" alt="MoreMKT - Asesoría" class="avatar-illustration">
