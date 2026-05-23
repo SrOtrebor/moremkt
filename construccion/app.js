@@ -52,12 +52,12 @@ checkboxes.forEach(cb => cb.addEventListener('change', updateCoursePack));
 
 if(packBtn) {
   packBtn.addEventListener('click', () => {
-    alert("¡Muy pronto! Esta sección de cursos y armado de packs de capacitación se encuentra actualmente en construcción. ¡Gracias por tu interés!");
+    openSoonModal("Esta sección de cursos y armado de packs de capacitación se encuentra actualmente en construcción. ¡Muy pronto podrás seleccionar y comprar tus cursos online!");
   });
 }
 if(packBtnTop) {
   packBtnTop.addEventListener('click', () => {
-    alert("¡Muy pronto! Esta sección de capacitación y mentorías profesionales se encuentra actualmente en construcción. ¡Gracias por tu interés!");
+    openSoonModal("Esta sección de capacitación y mentorías profesionales se encuentra actualmente en construcción. ¡Muy pronto podrás acceder a toda la oferta formativa de MoreMKT!");
   });
 }
 
@@ -637,3 +637,80 @@ if (detailsOverlay) {
 // Exponer globales
 window.openDetailsModal = openDetailsModal;
 window.closeDetailsModal = closeDetailsModal;
+
+// --- 9. MODALES PERSONALIZADOS Y FORMULARIO DE SOLUCIONES ---
+const soonModal = document.getElementById('soonModal');
+const soonOverlay = document.getElementById('soonOverlay');
+const solucionesModal = document.getElementById('solucionesModal');
+const solucionesOverlay = document.getElementById('solucionesOverlay');
+
+function openSoonModal(message) {
+  const soonMessage = document.getElementById('soon-message');
+  if (soonMessage) {
+    soonMessage.textContent = message;
+  }
+  if (soonModal) {
+    soonModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeSoonModal() {
+  if (soonModal) {
+    soonModal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+if (soonOverlay) {
+  soonOverlay.addEventListener('click', closeSoonModal);
+}
+
+function openSolucionesModal() {
+  const form = document.getElementById('soluciones-form');
+  if (form) form.reset();
+  
+  if (solucionesModal) {
+    solucionesModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeSolucionesModal() {
+  if (solucionesModal) {
+    solucionesModal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+if (solucionesOverlay) {
+  solucionesOverlay.addEventListener('click', closeSolucionesModal);
+}
+
+function submitSolucionesForm(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById('sol-name').value.trim();
+  const phone = document.getElementById('sol-phone').value.trim();
+  const email = document.getElementById('sol-email').value.trim();
+  const message = document.getElementById('sol-message').value.trim();
+  
+  if (!name || !phone || !email || !message) {
+    alert('Por favor completa todos los campos obligatorios.');
+    return;
+  }
+  
+  const waText = encodeURIComponent(
+    `¡Hola MoreMKT!\nQuiero solicitar un *Diagnóstico Online Gratis*:\n\n👤 *Nombre:* ${name}\n📱 *WhatsApp:* ${phone}\n📧 *Email:* ${email}\n💬 *Consulta/Tema:* ${message}`
+  );
+  
+  closeSolucionesModal();
+  window.open(`https://wa.me/5491176426155?text=${waText}`, '_blank');
+}
+
+// Exponer globales
+window.openSoonModal = openSoonModal;
+window.closeSoonModal = closeSoonModal;
+window.openSolucionesModal = openSolucionesModal;
+window.closeSolucionesModal = closeSolucionesModal;
+window.submitSolucionesForm = submitSolucionesForm;

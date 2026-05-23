@@ -230,7 +230,7 @@
         <span class="badge" style="color:#60a5fa;">END-TO-END</span>
         <h1>Transformación<br>Digital.</h1>
         <p>Proyectos de alto impacto con acompañamiento presencial en tus oficinas. Desde el diagnóstico hasta la implementación completa.</p>
-        <button class="btn-hero" style="background:#1D3557; color:#fff;" onclick="openModal('soluciones','Diagnóstico Gratuito', 'Gratis')">Agendar Diagnóstico</button>
+        <button class="btn-hero" style="background:#1D3557; color:#fff;" onclick="openSolucionesModal()">Solicitar Diagnóstico</button>
       </div>
       <div class="hero-image">
         <img src="Fotos/Fotos real/4.png" alt="MoreMKT - Soluciones" class="avatar-illustration">
@@ -239,10 +239,10 @@
 
     <!-- TARJETAS SUPERPUESTAS TIMELINE -->
     <div class="overlap-cards-container timeline-container grid-3">
-      <div class="overlap-card step-card">
+      <div class="overlap-card step-card" onclick="openSolucionesModal()" style="cursor: pointer;">
         <div class="step-num">1</div>
-        <h3>Diagnóstico</h3>
-        <p>Sesión online de 60 min para analizar tu situación actual.</p>
+        <h3>Diagnóstico Online Gratis</h3>
+        <p>Analizamos la situación actual de tu negocio para identificar oportunidades de crecimiento.</p>
         <span class="step-highlight">Gratis · Sin compromiso</span>
       </div>
       <div class="overlap-card step-card">
@@ -510,6 +510,50 @@
     <div id="details-modal-content">
       <!-- Se llena dinámicamente con JS -->
     </div>
+  </div>
+</div>
+
+<!-- ===== SOON MODAL (POPUP PERSONALIZADO) ===== -->
+<div class="booking-modal" id="soonModal" role="dialog" aria-modal="true" aria-labelledby="soon-title">
+  <div class="modal-overlay" id="soonOverlay"></div>
+  <div class="modal-card" style="max-width: 440px; padding: 3rem 2.2rem; text-align: center; border: 1.5px solid rgba(244, 186, 60, 0.4); box-shadow: 0 20px 45px rgba(244, 186, 60, 0.12);">
+    <button class="modal-close" onclick="closeSoonModal()" aria-label="Cerrar">✕</button>
+    <div style="font-size: 3.2rem; margin-bottom: 1.2rem; filter: drop-shadow(0 4px 6px rgba(244, 186, 60, 0.2));">🎓</div>
+    <h2 id="soon-title" style="font-size: 1.8rem; font-weight: 800; color: #111827; margin-bottom: 0.8rem; font-family: var(--font);">¡Muy pronto!</h2>
+    <p id="soon-message" style="font-size: 0.9rem; color: #4b5563; line-height: 1.55; margin-bottom: 1.8rem; font-weight: 500;"></p>
+    <button class="btn-card-featured" style="margin-top: 0; padding: 12px; font-size: 0.8rem;" onclick="closeSoonModal()">Entendido</button>
+  </div>
+</div>
+
+<!-- ===== SOLUCIONES MODAL (FORMULARIO INTERACTIVO) ===== -->
+<div class="booking-modal" id="solucionesModal" role="dialog" aria-modal="true" aria-labelledby="soluciones-title">
+  <div class="modal-overlay" id="solucionesOverlay"></div>
+  <div class="modal-card" style="max-width: 500px; padding: 2.2rem 2.5rem; border: 1.5px solid rgba(29, 53, 87, 0.3); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);">
+    <button class="modal-close" onclick="closeSolucionesModal()" aria-label="Cerrar">✕</button>
+    <h2 id="soluciones-title" style="font-size: 1.6rem; font-weight: 900; color: #111827; margin-bottom: 0.4rem; font-family: var(--font);">Diagnóstico Online Gratis</h2>
+    <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 1.6rem; line-height: 1.45; font-weight: 500;">Contanos sobre tu negocio y el tema que querés tratar. Nos pondremos en contacto con vos a la brevedad.</p>
+    
+    <form id="soluciones-form" onsubmit="submitSolucionesForm(event);">
+      <div class="modal-form-group">
+        <label for="sol-name">Nombre Completo *</label>
+        <input type="text" id="sol-name" placeholder="Tu nombre" required autocomplete="name">
+      </div>
+      <div class="modal-form-group">
+        <label for="sol-phone">WhatsApp *</label>
+        <input type="tel" id="sol-phone" placeholder="11 7642-6155" required autocomplete="tel">
+      </div>
+      <div class="modal-form-group">
+        <label for="sol-email">Correo Electrónico *</label>
+        <input type="email" id="sol-email" placeholder="hola@empresa.com" required autocomplete="email">
+      </div>
+      <div class="modal-form-group">
+        <label for="sol-message">¿Qué tema te gustaría tratar o cuál es tu consulta? *</label>
+        <textarea id="sol-message" rows="4" placeholder="Contanos brevemente sobre tu negocio, objetivos o problemas actuales..." required style="padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-family: inherit; font-size: 0.9rem; resize: none; transition: var(--transition); outline: none;"></textarea>
+      </div>
+      <button type="submit" class="btn-pay" style="margin-top: 1rem; background: var(--azul); color: #fff; box-shadow: 0 6px 15px rgba(29, 53, 87, 0.25);">
+        📩 Solicitar Diagnóstico
+      </button>
+    </form>
   </div>
 </div>
 
