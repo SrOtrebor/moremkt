@@ -103,6 +103,11 @@ function openModal(service, detail, price) {
     }
   });
 
+  // FB Pixel Event: InitiateCheckout
+  if (typeof fbq === 'function') {
+    fbq('track', 'InitiateCheckout');
+  }
+
   modalService = detail;
   modalPrice = price || '$70.000 ARS';
   document.getElementById('modal-service-label').textContent = detail;
@@ -434,6 +439,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }]
               }
             });
+
+            // FB Pixel Event: Purchase
+            if (typeof fbq === 'function') {
+              fbq('track', 'Purchase', {
+                value: 70000,
+                currency: 'ARS'
+              });
+            }
         } else if (status === 'pending') {
             title = 'Pago en Proceso';
             message = 'Tu pago está pendiente de acreditación. En cuanto se confirme, te enviaremos el mail con la confirmación de la cita.';
@@ -736,6 +749,14 @@ async function submitSolucionesForm(e) {
       phone_number: phone
     }
   });
+
+  // FB Pixel Event: Lead
+  if (typeof fbq === 'function') {
+    fbq('track', 'Lead', {
+      em: email, // Advanced matching requires specific keys
+      ph: phone
+    });
+  }
   
   const submitBtn = document.querySelector('#soluciones-form button[type="submit"]');
   if (submitBtn) {
