@@ -398,14 +398,21 @@ function renderLeads() {
 
     tbody.innerHTML = currentLeads.map(lead => {
         let dateStr = '';
-        if (lead.createdAt && lead.createdAt._seconds) {
-            dateStr = new Date(lead.createdAt._seconds * 1000).toISOString().split('T')[0];
-        } else if (lead.createdAt) {
-            dateStr = new Date(lead.createdAt).toISOString().split('T')[0];
+        try {
+            if (lead.createdAt && lead.createdAt._seconds) {
+                dateStr = new Date(lead.createdAt._seconds * 1000).toISOString().split('T')[0];
+            } else if (lead.createdAt) {
+                dateStr = new Date(lead.createdAt).toISOString().split('T')[0];
+            }
+        } catch(e) {
+            console.warn('Fecha no parseable:', lead.createdAt);
         }
+        
+        const displayDate = dateStr ? formatDate(dateStr) : 'Sin fecha';
+        
         return `
         <tr>
-            <td>${escapeHtml(formatDate(dateStr))}</td>
+            <td>${escapeHtml(displayDate)}</td>
             <td>${escapeHtml(lead.name)}</td>
             <td>${escapeHtml(lead.phone)}</td>
             <td>${escapeHtml(lead.email)}</td>
