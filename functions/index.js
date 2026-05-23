@@ -237,7 +237,7 @@ app.post("/createBooking", async (req, res) => {
         if (!existing.empty) return res.status(400).json({ error: "Horario no disponible" });
 
         const pricingDoc = await db.collection("pricing_config").doc("default").get();
-        const price = pricingDoc.exists ? (pricingDoc.data().individual || 10000) : 10000;
+        const price = pricingDoc.exists ? (pricingDoc.data().individual || 70000) : 70000;
 
         const bookingRef = await db.collection("bookings").add({
             clientName: name,

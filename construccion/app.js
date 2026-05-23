@@ -52,15 +52,12 @@ checkboxes.forEach(cb => cb.addEventListener('change', updateCoursePack));
 
 if(packBtn) {
   packBtn.addEventListener('click', () => {
-    const count = document.querySelectorAll('.course-check:checked').length;
-    if (count === 0) return;
-    openModal('capacitacion', `Pack de ${count} cursos seleccionados`);
+    alert("¡Muy pronto! Esta sección de cursos y armado de packs de capacitación se encuentra actualmente en construcción. ¡Gracias por tu interés!");
   });
 }
 if(packBtnTop) {
   packBtnTop.addEventListener('click', () => {
-    // Scroll abajo hacia los cursos o abrir modal
-    document.querySelector('.overlap-cards-container').scrollIntoView({behavior: 'smooth'});
+    alert("¡Muy pronto! Esta sección de capacitación y mentorías profesionales se encuentra actualmente en construcción. ¡Gracias por tu interés!");
   });
 }
 
@@ -95,7 +92,7 @@ let currentYear = new Date().getFullYear();
 
 function openModal(service, detail, price) {
   modalService = detail;
-  modalPrice = price || '$10.000 ARS';
+  modalPrice = price || '$70.000 ARS';
   document.getElementById('modal-service-label').textContent = detail;
   
   // Actualizar precio en la vista del modal
