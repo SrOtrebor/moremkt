@@ -323,6 +323,10 @@ app.put("/admin/config/pricing", requireAuth, async (req, res) => {
         if (typeof ventas_ya === "number" && ventas_ya >= 0 && ventas_ya <= 10000000) {
             dataToUpdate.ventas_ya = ventas_ya;
         }
+        const { mentoria } = req.body;
+        if (typeof mentoria === "number" && mentoria >= 0 && mentoria <= 10000000) {
+            dataToUpdate.mentoria = mentoria;
+        }
 
         await db.collection("pricing_config").doc("default").set(dataToUpdate, { merge: true });
         return res.status(200).json({ success: true });
@@ -550,6 +554,9 @@ app.post("/createBooking", bookingLimiter, async (req, res) => {
         if (service === "ventas_ya") {
             price = configData.ventas_ya || 350000;
             titleService = "Pack Inicial: Ventas Ya";
+        } else if (service === "mentoria") {
+            price = configData.mentoria || 150000;
+            titleService = "Mentoría 1:1";
         }
 
         const bookingRef = await db.collection("bookings").add({

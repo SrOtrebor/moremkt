@@ -340,6 +340,21 @@ ul {
   perspective: 1000px;
 }
 
+.hero-text-box {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 2.2rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.95);
+  max-width: 440px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  font-weight: 500;
+}
+
 .avatar-illustration {
   width: 100%;
   max-width: 380px;
@@ -352,6 +367,54 @@ ul {
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15),
     inset 0 0 0 1px rgba(255, 255, 255, 0.1);
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+  transform: translateZ(30px);
+}
+
+.service-highlight-card {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 3rem 2.5rem;
+  margin: 4rem auto 2rem;
+  max-width: 900px;
+  text-align: center;
+  color: #fff;
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+}
+.card-publicidad {
+  background: linear-gradient(135deg, var(--purpura), #2a113d);
+  box-shadow: 0 25px 50px rgba(75, 29, 97, 0.25);
+}
+.card-asesoria {
+  background: linear-gradient(135deg, var(--verde), #064e3b);
+  box-shadow: 0 25px 50px rgba(35, 160, 122, 0.25);
+}
+.card-capacitacion {
+  background: linear-gradient(135deg, var(--dorado), #78350f);
+  box-shadow: 0 25px 50px rgba(233, 179, 66, 0.25);
+}
+.card-soluciones {
+  background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+  box-shadow: 0 25px 50px rgba(59, 130, 246, 0.25);
+}
+.service-highlight-card::before {
+  content: '"';
+  position: absolute;
+  top: -20px;
+  left: 20px;
+  font-size: 140px;
+  color: rgba(255, 255, 255, 0.05);
+  font-family: Georgia, serif;
+  line-height: 1;
+  pointer-events: none;
+}
+.service-highlight-card p {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  font-weight: 500;
+  margin: 0;
+}
   animation: avatarFloat 6s ease-in-out infinite;
 }
 

@@ -108,6 +108,10 @@ function loadPricingForm(pricing) {
     if (ventasYaInput) {
         ventasYaInput.value = pricing.ventas_ya || 350000;
     }
+    const mentoriaInput = document.getElementById('price-mentoria');
+    if (mentoriaInput) {
+        mentoriaInput.value = pricing.mentoria || 0;
+    }
 }
 
 function initForms() {
@@ -294,6 +298,10 @@ async function savePricing() {
         const ventasYaInput = document.getElementById('price-ventas-ya');
         if (ventasYaInput) {
             pricingData.ventas_ya = parseInt(ventasYaInput.value);
+        }
+        const mentoriaInput = document.getElementById('price-mentoria');
+        if (mentoriaInput) {
+            pricingData.mentoria = parseInt(mentoriaInput.value);
         }
 
         const token = localStorage.getItem('admin_token');

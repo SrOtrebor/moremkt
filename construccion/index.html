@@ -491,6 +491,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       
     </div>
+
+    <!-- TEXTO DESTACADO DEL SERVICIO -->
+    <div class="service-highlight-card card-publicidad">
+      <p>Campañas de publicidad digital inteligentes donde el diseño funcional y la estrategia se unen para escalar tus ventas.</p>
+    </div>
       
     </div>
   </div>
@@ -501,7 +506,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- HERO SECTION -->
     <div class="hero-section">
       <div class="hero-text">
-        <span class="badge" style="color:#10B981;">CONSULTORÍA</span>
+        <span class="badge" style="color:#ffffff; border-color: rgba(255,255,255,0.3);">CONSULTORÍA</span>
         <h1>Decisiones basadas<br>en datos reales.</h1>
         <p>Sesiones técnicas de marketing, embudos y procesos. Analizamos tu negocio para optimizar tu inversión y maximizar las ventas.</p>
         <button id="btn-agendar-asesoria" class="btn-hero" style="background:#10B981; color:#fff;" onclick="openModal('asesoria','Consultoría Estratégica', '$70.000 ARS')">Agendar Sesión (MP)</button>
@@ -534,6 +539,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p>Reuniones periódicas de seguimiento y ajuste estratégico a medida.</p>
       </div>
     </div>
+
+    <!-- TEXTO DESTACADO DEL SERVICIO -->
+    <div class="service-highlight-card card-asesoria">
+      <p>Auditorías de cuentas y embudos de conversión sin rodeos. Analizamos tus procesos actuales para tapar fugas de presupuesto y acelerar la ganancia de tu inversión.</p>
+    </div>
   </div>
 
 
@@ -542,10 +552,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- HERO SECTION -->
     <div class="hero-section">
       <div class="hero-text">
-        <span class="badge" style="color:#F4BA3C;">FORMACIÓN</span>
-        <h1>Cursos y<br>Mentorías.</h1>
-        <p>Seleccioná <strong>3 o más cursos</strong> en nuestro pack y desbloqueás una mentoría grupal online <strong>totalmente gratis</strong>.</p>
-        <button class="btn-hero" style="background:#F4BA3C; color:#1a1a1a;" id="packBtnTop">Armar Pack</button>
+        <span class="badge" style="color:#1a1a1a; background: rgba(255,255,255,0.8); border-color: rgba(255,255,255,1);">FORMACIÓN</span>
+        <h1>Mentorías y<br>Cursos.</h1>
+        <p>Acelerá tu crecimiento con mentorías 1:1 especializadas. Y muy pronto, los mejores cursos online para llevar tu equipo al siguiente nivel.</p>
+        <button class="btn-hero" style="background:#1a1a1a; color:#F4BA3C;" onclick="document.querySelector('.overlap-cards-container').scrollIntoView({ behavior: 'smooth' })">Explorar Opciones</button>
       </div>
       <div class="hero-image">
         <img src="Fotos/Capacitaciones.png" alt="MoreMKT - Capacitación" class="avatar-illustration">
@@ -553,47 +563,54 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 
     <!-- TARJETAS SUPERPUESTAS -->
-    <div class="promo-bar-container">
-      <div class="promo-bar" id="promoBar">🎁 ¡Mentoría grupal gratuita incluida en tu pack!</div>
+    <!-- Mentoría Destacada -->
+    <div style="margin-top: -30px; margin-bottom: 2rem; display: flex; justify-content: center; position: relative; z-index: 5;">
+      <div class="overlap-card pricing-card featured" style="--accent: #F4BA3C; max-width: 600px; width: 100%; text-align: center;">
+        <div class="popular-tag" style="background: #1a1a1a; color: #F4BA3C;"><i class="ph ph-star-fill"></i> DISPONIBLE AHORA</div>
+        <div class="card-icon-wrap" style="color: #F4BA3C; background: #fef5e0; margin: 0 auto 1rem;">
+          <i class="ph ph-chalkboard-teacher"></i>
+        </div>
+        <h3>Mentoría 1:1 Intensiva</h3>
+        <p class="subtitle" style="margin-bottom: 1rem;">Resolvé bloqueos y escalá tu estrategia con mi acompañamiento directo.</p>
+        <p style="font-size: 0.9rem; color: #374151; margin-bottom: 2rem;">Sesión online de 60-90 minutos donde analizamos tu negocio en vivo, estructuramos tu ecosistema de pauta y trazamos un plan de acción a medida.</p>
+        <button id="btn-agendar-mentoria" class="btn-card-featured" style="background: #1a1a1a; color: #F4BA3C; border: none; font-size: 1rem; padding: 16px;" onclick="openModal('capacitacion','Mentoría 1:1', 'A convenir')">Agendar Mentoría</button>
+      </div>
     </div>
     
-    <div class="overlap-cards-container grid-4">
+    <div style="text-align: center; margin-bottom: 2rem; position: relative; z-index: 5;">
+      <h3 style="color: #111827; font-size: 1.8rem; font-weight: 800;">Próximos Lanzamientos</h3>
+    </div>
+
+    <div class="overlap-cards-container grid-4" style="margin-top: 0;">
       <div class="overlap-card course-card">
-        <div class="card-icon-wrap" style="color: #F4BA3C; background: #fef5e0;">📱</div>
-        <h3>Meta Ads desde Cero</h3>
+        <div class="card-icon-wrap" style="color: #6b7280; background: #f3f4f6;">📱</div>
+        <h3 style="color: #4b5563;">Meta Ads desde Cero</h3>
         <p class="course-meta">⏱ 6 semanas · Inicial</p>
-        <label class="course-check-label">
-          <input type="checkbox" class="course-check"> Agregar al pack
-        </label>
+        <span class="badge" style="background: #e5e7eb; color: #4b5563; font-size: 0.7rem; border: none;">PRÓXIMAMENTE</span>
       </div>
       <div class="overlap-card course-card">
-        <div class="card-icon-wrap" style="color: #F4BA3C; background: #fef5e0;">🔍</div>
-        <h3>Google Ads Avanzado</h3>
+        <div class="card-icon-wrap" style="color: #6b7280; background: #f3f4f6;">🔍</div>
+        <h3 style="color: #4b5563;">Google Ads Avanzado</h3>
         <p class="course-meta">⏱ 8 semanas · Intermedio</p>
-        <label class="course-check-label">
-          <input type="checkbox" class="course-check"> Agregar al pack
-        </label>
+        <span class="badge" style="background: #e5e7eb; color: #4b5563; font-size: 0.7rem; border: none;">PRÓXIMAMENTE</span>
       </div>
       <div class="overlap-card course-card">
-        <div class="card-icon-wrap" style="color: #F4BA3C; background: #fef5e0;">📊</div>
-        <h3>Analytics y Métricas</h3>
+        <div class="card-icon-wrap" style="color: #6b7280; background: #f3f4f6;">📊</div>
+        <h3 style="color: #4b5563;">Analytics y Métricas</h3>
         <p class="course-meta">⏱ 4 semanas · Inicial</p>
-        <label class="course-check-label">
-          <input type="checkbox" class="course-check"> Agregar al pack
-        </label>
+        <span class="badge" style="background: #e5e7eb; color: #4b5563; font-size: 0.7rem; border: none;">PRÓXIMAMENTE</span>
       </div>
       <div class="overlap-card course-card">
-        <div class="card-icon-wrap" style="color: #F4BA3C; background: #fef5e0;">🚀</div>
-        <h3>Estrategia Performance</h3>
+        <div class="card-icon-wrap" style="color: #6b7280; background: #f3f4f6;">🚀</div>
+        <h3 style="color: #4b5563;">Estrategia Performance</h3>
         <p class="course-meta">⏱ 10 semanas · Avanzado</p>
-        <label class="course-check-label">
-          <input type="checkbox" class="course-check"> Agregar al pack
-        </label>
+        <span class="badge" style="background: #e5e7eb; color: #4b5563; font-size: 0.7rem; border: none;">PRÓXIMAMENTE</span>
       </div>
     </div>
-    
-    <div style="text-align: center; margin-top: 2rem;">
-      <button class="btn-pack" id="packBtn">Seleccioná al menos un curso</button>
+
+    <!-- TEXTO DESTACADO DEL SERVICIO -->
+    <div class="service-highlight-card card-capacitacion">
+      <p>Llevá la práctica real a tu equipo. Automatización, métricas y pauta avanzada explicadas con metodología clara y aplicable desde el primer día.</p>
     </div>
   </div>
 
@@ -633,6 +650,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p>Ejecución integral con presencia en tu empresa.</p>
         <span class="step-highlight">Seguimiento real</span>
       </div>
+    </div>
+
+    <!-- TEXTO DESTACADO DEL SERVICIO -->
+    <div class="service-highlight-card card-soluciones">
+      <p>Acompañamiento integral en tu estructura de negocio. Creamos entornos de trabajo para mejorar rendimientos, nos metemos en el ADN de tu empresa, organizamos tus flujos de trabajo e implementamos la estructura digital definitiva.</p>
     </div>
   </div>
 
@@ -696,10 +718,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 </main>
 
-<!-- ===== SEPARADOR BRAND RESPONSIVO DE CASOS DE ÉXITO ===== -->
-<div class="brand-separator">
-  <img src="Fotos/Fotos real/Casos de exitos.jpeg" alt="Casos de Éxito MoreMKT" class="separator-img">
-</div>
+
 
 <!-- ===== CASOS DE ÉXITO & TESTIMONIOS ===== -->
 <section class="social-proof" aria-label="Casos de éxito y opiniones de clientes de MoreMKT">

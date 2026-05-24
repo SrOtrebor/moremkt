@@ -103,6 +103,12 @@ async function fetchPricing() {
                 btnAsesoria.innerHTML = `Agendar Sesión ($${data.individual.toLocaleString('es-AR')})`;
                 btnAsesoria.setAttribute('onclick', `openModal('asesoria', 'Consultoría Estratégica', '$${data.individual.toLocaleString('es-AR')} ARS')`);
             }
+            
+            const btnMentoria = document.getElementById('btn-agendar-mentoria');
+            if (btnMentoria && data.mentoria) {
+                btnMentoria.innerHTML = `Agendar Mentoría ($${data.mentoria.toLocaleString('es-AR')})`;
+                btnMentoria.setAttribute('onclick', `openModal('capacitacion', 'Mentoría 1:1', '$${data.mentoria.toLocaleString('es-AR')} ARS')`);
+            }
         }
     } catch (e) {
         console.warn('Error al obtener precios dinámicos', e);
@@ -369,13 +375,20 @@ async function submitModalBooking() {
   
   const dateStr = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}`;
 
+  let mappedService = 'asesoria';
+  if (modalService === 'Pack Inicial: Ventas Ya') {
+      mappedService = 'ventas_ya';
+  } else if (modalService === 'Mentoría 1:1') {
+      mappedService = 'mentoria';
+  }
+
   const formData = {
       name: name,
       email: email,
       phone: phone,
       date: dateStr,
       time: selectedTime,
-      service: modalService === 'Pack Inicial: Ventas Ya' ? 'ventas_ya' : 'asesoria'
+      service: mappedService
   };
 
   const btnPay = document.getElementById('modal-btn-pay');
