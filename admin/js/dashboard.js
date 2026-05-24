@@ -1,4 +1,5 @@
 // Configuración de API
+// REEMPLAZAR 'TU-PROJECT-ID' con el ID de tu proyecto de Firebase
 const PROJECT_ID = 'moremkt-reservas';
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? `http://localhost:5001/${PROJECT_ID}/us-central1/api`
@@ -7,32 +8,6 @@ const API_BASE = window.location.hostname === 'localhost' || window.location.hos
 let currentConfig = null;
 let currentBlocks = [];
 let currentBookings = [];
-
-// ============================================
-// SEGURIDAD: Escape de HTML para prevenir XSS
-// ============================================
-function escapeHtml(str) {
-    if (str === null || str === undefined) return '-';
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
-// ============================================
-// SEGURIDAD: Manejo de sesión expirada (401)
-// ============================================
-function handleUnauthorized(response) {
-    if (response.status === 401) {
-        localStorage.removeItem('admin_token');
-        localStorage.removeItem('admin_user');
-        window.location.href = 'login.html';
-        return true;
-    }
-    return false;
-}
 
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('admin_token');
@@ -87,7 +62,6 @@ async function loadConfig() {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        if (handleUnauthorized(response)) return;
         if (!response.ok) throw new Error('Error al cargar configuración');
 
         const data = await response.json();
@@ -100,8 +74,8 @@ async function loadConfig() {
         renderBlocks();
 
     } catch (error) {
-        console.error('Error al cargar configuración.');
-        alert('Error al cargar configuración. Recargá la página.');
+        console.error('Error:', error);
+        alert('Error al cargar configuración: ' + error.message);
     }
 }
 
@@ -130,10 +104,14 @@ function loadAvailabilityForm(config) {
 }
 
 function loadPricingForm(pricing) {
-    document.getElementById('price-individual').value = pricing.individual || 70000;
+    document.getElementById('price-individual').value = pricing.individual || 10000;
     const ventasYaInput = document.getElementById('price-ventas-ya');
     if (ventasYaInput) {
         ventasYaInput.value = pricing.ventas_ya || 350000;
+    }
+    const mentoriaInput = document.getElementById('price-mentoria');
+    if (mentoriaInput) {
+        mentoriaInput.value = pricing.mentoria || 0;
     }
 }
 
@@ -188,15 +166,14 @@ async function saveAvailability() {
             body: JSON.stringify(configData)
         });
 
-        if (handleUnauthorized(response)) return;
         if (!response.ok) throw new Error('Error al guardar');
 
         alert('✅ Configuración guardada correctamente');
         loadConfig();
 
     } catch (error) {
-        console.error('Error al guardar disponibilidad.');
-        alert('❌ Error al guardar la configuración.');
+        console.error('Error:', error);
+        alert('❌ Error al guardar: ' + error.message);
     }
 }
 
@@ -219,7 +196,6 @@ async function createBlock() {
             body: JSON.stringify(blockData)
         });
 
-        if (handleUnauthorized(response)) return;
         if (!response.ok) throw new Error('Error al crear bloqueo');
 
         alert('✅ Horario bloqueado correctamente');
@@ -227,8 +203,8 @@ async function createBlock() {
         loadConfig();
 
     } catch (error) {
-        console.error('Error al crear bloqueo.');
-        alert('❌ Error al crear el bloqueo.');
+        console.error('Error:', error);
+        alert('❌ Error: ' + error.message);
     }
 }
 
@@ -242,15 +218,14 @@ async function deleteBlock(blockId) {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        if (handleUnauthorized(response)) return;
         if (!response.ok) throw new Error('Error al eliminar');
 
         alert('✅ Bloqueo eliminado');
         loadConfig();
 
     } catch (error) {
-        console.error('Error al eliminar bloqueo.');
-        alert('❌ Error al eliminar el bloqueo.');
+        console.error('Error:', error);
+        alert('❌ Error: ' + error.message);
     }
 }
 
@@ -264,11 +239,11 @@ function renderBlocks() {
 
     tbody.innerHTML = currentBlocks.map(block => `
         <tr>
-            <td>${escapeHtml(formatDate(block.date))}</td>
-            <td>${escapeHtml(block.startTime)} - ${escapeHtml(block.endTime)}</td>
-            <td>${escapeHtml(block.reason)}</td>
+            <td>${formatDate(block.date)}</td>
+            <td>${block.startTime} - ${block.endTime}</td>
+            <td>${block.reason || '-'}</td>
             <td>
-                <button class="btn btn-danger" onclick="deleteBlock('${escapeHtml(block.id)}')">Eliminar</button>
+                <button class="btn btn-danger" onclick="deleteBlock('${block.id}')">Eliminar</button>
             </td>
         </tr>
     `).join('');
@@ -285,7 +260,6 @@ async function loadBookings() {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        if (handleUnauthorized(response)) return;
         if (!response.ok) throw new Error('Error al cargar reservas');
 
         const data = await response.json();
@@ -293,8 +267,8 @@ async function loadBookings() {
         renderBookings();
 
     } catch (error) {
-        console.error('Error al cargar reservas.');
-        alert('Error al cargar las reservas. Recargá la página.');
+        console.error('Error:', error);
+        alert('Error al cargar reservas: ' + error.message);
     }
 }
 
@@ -302,20 +276,17 @@ function renderBookings() {
     const tbody = document.getElementById('bookings-tbody');
 
     if (currentBookings.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-secondary);">No hay reservas</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-secondary);">No hay reservas</td></tr>';
         return;
     }
 
     tbody.innerHTML = currentBookings.map(booking => `
         <tr>
-            <td>${escapeHtml(formatDate(booking.date))}</td>
-            <td>${escapeHtml(booking.time)}</td>
-            <td>${escapeHtml(booking.clientName)}</td>
-            <td>${escapeHtml(booking.clientEmail)}</td>
-            <td><span class="status-badge status-${escapeHtml(booking.status)}">${formatStatus(booking.status)}</span></td>
-            <td>
-                ${booking.status !== 'cancelled' ? `<button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.8rem;" onclick="cancelBooking('${escapeHtml(booking.id)}')">Cancelar</button>` : '-'}
-            </td>
+            <td>${formatDate(booking.date)}</td>
+            <td>${booking.time}</td>
+            <td>${booking.clientName || '-'}</td>
+            <td>${booking.clientEmail || '-'}</td>
+            <td><span class="status-badge status-${booking.status}">${formatStatus(booking.status)}</span></td>
         </tr>
     `).join('');
 }
@@ -325,16 +296,13 @@ async function savePricing() {
         const pricingData = {
             individual: parseInt(document.getElementById('price-individual').value)
         };
-        
         const ventasYaInput = document.getElementById('price-ventas-ya');
         if (ventasYaInput) {
             pricingData.ventas_ya = parseInt(ventasYaInput.value);
         }
-
-        if (isNaN(pricingData.individual) || pricingData.individual < 0 || 
-            (pricingData.ventas_ya !== undefined && (isNaN(pricingData.ventas_ya) || pricingData.ventas_ya < 0))) {
-            alert('❌ Ingresá un precio válido.');
-            return;
+        const mentoriaInput = document.getElementById('price-mentoria');
+        if (mentoriaInput) {
+            pricingData.mentoria = parseInt(mentoriaInput.value);
         }
 
         const token = localStorage.getItem('admin_token');
@@ -347,15 +315,14 @@ async function savePricing() {
             body: JSON.stringify(pricingData)
         });
 
-        if (handleUnauthorized(response)) return;
         if (!response.ok) throw new Error('Error al guardar precios');
 
         alert('✅ Precios actualizados correctamente');
         loadConfig();
 
     } catch (error) {
-        console.error('Error al guardar precios.');
-        alert('❌ Error al actualizar los precios.');
+        console.error('Error:', error);
+        alert('❌ Error: ' + error.message);
     }
 }
 
@@ -376,81 +343,91 @@ function formatStatus(status) {
 
 window.deleteBlock = deleteBlock;
 
-let currentLeads = [];
-
+// --- LEADS ---
 async function loadLeads() {
+    const tbody = document.getElementById('leads-tbody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Cargando leads...</td></tr>';
+
     try {
         const token = localStorage.getItem('admin_token');
         const response = await fetch(`${API_BASE}/admin/leads`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        if (handleUnauthorized(response)) return;
         if (!response.ok) throw new Error('Error al cargar leads');
 
         const data = await response.json();
-        currentLeads = data.leads;
-        renderLeads();
+        const leads = data.leads || [];
 
+        window.currentLeads = leads; // Para poder descargarlos luego
+
+        if (leads.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-secondary);">No hay leads disponibles</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = leads.map(lead => {
+            let fecha = 'N/A';
+            try {
+                if (lead.createdAt && lead.createdAt._seconds) {
+                    fecha = new Date(lead.createdAt._seconds * 1000).toLocaleDateString('es-AR');
+                } else if (lead.createdAt && typeof lead.createdAt === 'string') {
+                    fecha = new Date(lead.createdAt).toLocaleDateString('es-AR');
+                } else if (lead.createdAt && typeof lead.createdAt.toDate === 'function') {
+                    fecha = lead.createdAt.toDate().toLocaleDateString('es-AR');
+                }
+            } catch(e) {
+                console.warn('Error parsing date for lead', lead);
+            }
+            
+            return `
+                <tr>
+                    <td>${fecha}</td>
+                    <td>${lead.name || lead.nombre || '-'}</td>
+                    <td>${lead.email || '-'}</td>
+                    <td>${lead.phone || lead.telefono || '-'}</td>
+                    <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${lead.message || lead.mensaje || ''}">${lead.message || lead.mensaje || '-'}</td>
+                </tr>
+            `;
+        }).join('');
     } catch (error) {
-        console.error('Error al cargar leads.');
-        alert('Error al cargar los leads.');
+        console.error('Error:', error);
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--danger);">Error al cargar los leads</td></tr>';
     }
 }
 
-function renderLeads() {
-    const tbody = document.getElementById('leads-tbody');
-
-    if (currentLeads.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-secondary);">No hay leads</td></tr>';
+document.getElementById('btn-export-csv')?.addEventListener('click', () => {
+    if (!window.currentLeads || window.currentLeads.length === 0) {
+        alert("No hay leads para exportar.");
         return;
     }
 
-    tbody.innerHTML = currentLeads.map(lead => {
-        let dateStr = '';
-        try {
-            if (lead.createdAt && lead.createdAt._seconds) {
-                dateStr = new Date(lead.createdAt._seconds * 1000).toISOString().split('T')[0];
-            } else if (lead.createdAt) {
-                dateStr = new Date(lead.createdAt).toISOString().split('T')[0];
-            }
-        } catch(e) {
-            console.warn('Fecha no parseable:', lead.createdAt);
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Fecha,Nombre,Email,Telefono,Mensaje\n";
+
+    window.currentLeads.forEach(lead => {
+        let fecha = 'N/A';
+        if (lead.createdAt && lead.createdAt._seconds) {
+            fecha = new Date(lead.createdAt._seconds * 1000).toLocaleDateString('es-AR');
+        } else if (lead.createdAt) {
+            fecha = new Date(lead.createdAt).toLocaleDateString('es-AR');
         }
         
-        const displayDate = dateStr ? formatDate(dateStr) : 'Sin fecha';
-        
-        return `
-        <tr>
-            <td>${escapeHtml(displayDate)}</td>
-            <td>${escapeHtml(lead.name)}</td>
-            <td>${escapeHtml(lead.phone)}</td>
-            <td>${escapeHtml(lead.email)}</td>
-            <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(lead.message)}">${escapeHtml(lead.message)}</td>
-        </tr>
-        `;
-    }).join('');
-}
+        let nombre = (lead.name || lead.nombre || '').replace(/,/g, " ");
+        let email = (lead.email || '').replace(/,/g, " ");
+        let tel = (lead.phone || lead.telefono || '').replace(/,/g, " ");
+        let msg = (lead.message || lead.mensaje || '').replace(/,/g, " ").replace(/\n/g, " ");
 
-async function cancelBooking(bookingId) {
-    if (!confirm('¿Estás seguro de que quieres cancelar esta reserva?')) return;
-    
-    try {
-        const token = localStorage.getItem('admin_token');
-        const response = await fetch(`${API_BASE}/admin/bookings/${bookingId}/cancel`, {
-            method: 'PUT',
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
+        csvContent += `${fecha},${nombre},${email},${tel},${msg}\n`;
+    });
 
-        if (handleUnauthorized(response)) return;
-        if (!response.ok) throw new Error('Error al cancelar reserva');
-
-        alert('✅ Reserva cancelada correctamente');
-        loadBookings();
-    } catch (error) {
-        console.error('Error al cancelar reserva.');
-        alert('❌ Error al cancelar la reserva.');
-    }
-}
-
-window.cancelBooking = cancelBooking;
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "moremkt_leads.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
