@@ -221,12 +221,12 @@ ul {
   left: 0;
   right: 0;
   /* Justo debajo del navbar */
-  height: 600px;
+  height: 850px;
   /* Cubre una buena porción antes del blanco */
   background: var(--purpura);
   /* Empieza con el color default, JS lo cambia */
   z-index: -1;
-  transition: background 0.5s ease-in-out;
+  transition: background 0.5s ease-in-out, height 0.5s ease-in-out;
 }
 
 .hero-bg::after {
@@ -1065,7 +1065,7 @@ ul {
   }
 
   .hero-bg {
-    height: 750px;
+    height: 1100px;
   }
 
   .overlap-cards-container {
