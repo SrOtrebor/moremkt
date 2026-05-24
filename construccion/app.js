@@ -105,7 +105,7 @@ async function fetchPricing() {
             }
             
             const btnMentoria = document.getElementById('btn-agendar-mentoria');
-            if (btnMentoria && data.mentoria) {
+            if (btnMentoria && data.mentoria !== undefined) {
                 btnMentoria.innerHTML = `Agendar Mentoría ($${data.mentoria.toLocaleString('es-AR')})`;
                 btnMentoria.setAttribute('onclick', `openModal('capacitacion', 'Mentoría 1:1', '$${data.mentoria.toLocaleString('es-AR')} ARS')`);
             }
