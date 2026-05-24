@@ -218,6 +218,17 @@ ul { list-style: none; }
   50% { transform: translateY(-12px); }
 }
 
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.2; transform: scale(0.9); }
+  50% { opacity: 0.4; transform: scale(1.1); }
+}
+
+/* Hover específico para las service-cards de Sobre Mí */
+.service-card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.12) !important;
+}
+
 
 /* ===== TARJETAS SUPERPUESTAS (OVERLAP CARDS - 3D PARALLAX GLASS EDITION) ===== */
 .overlap-cards-container {
