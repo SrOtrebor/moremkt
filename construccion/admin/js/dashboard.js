@@ -50,6 +50,7 @@ function initNavigation() {
 
             if (sectionId === 'blocks') loadBlocks();
             else if (sectionId === 'bookings') loadBookings();
+            else if (sectionId === 'leads') loadLeads();
         });
     });
 }
@@ -341,3 +342,86 @@ function formatStatus(status) {
 }
 
 window.deleteBlock = deleteBlock;
+
+// --- LEADS ---
+async function loadLeads() {
+    const tbody = document.getElementById('leads-tbody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Cargando leads...</td></tr>';
+
+    try {
+        const token = localStorage.getItem('admin_token');
+        const response = await fetch(`${API_BASE}/admin/leads`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Error al cargar leads');
+
+        const data = await response.json();
+        const leads = data.leads || [];
+
+        window.currentLeads = leads; // Para poder descargarlos luego
+
+        if (leads.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-secondary);">No hay leads disponibles</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = leads.map(lead => {
+            let fecha = 'N/A';
+            if (lead.createdAt && lead.createdAt._seconds) {
+                fecha = formatDate(new Date(lead.createdAt._seconds * 1000).toISOString().split('T')[0]);
+            } else if (lead.createdAt) {
+                fecha = formatDate(new Date(lead.createdAt).toISOString().split('T')[0]);
+            }
+            
+            return `
+                <tr>
+                    <td>${fecha}</td>
+                    <td>${lead.name || lead.nombre || '-'}</td>
+                    <td>${lead.email || '-'}</td>
+                    <td>${lead.phone || lead.telefono || '-'}</td>
+                    <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${lead.message || lead.mensaje || ''}">${lead.message || lead.mensaje || '-'}</td>
+                </tr>
+            `;
+        }).join('');
+    } catch (error) {
+        console.error('Error:', error);
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--danger);">Error al cargar los leads</td></tr>';
+    }
+}
+
+document.getElementById('btn-export-csv')?.addEventListener('click', () => {
+    if (!window.currentLeads || window.currentLeads.length === 0) {
+        alert("No hay leads para exportar.");
+        return;
+    }
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Fecha,Nombre,Email,Telefono,Mensaje\n";
+
+    window.currentLeads.forEach(lead => {
+        let fecha = 'N/A';
+        if (lead.createdAt && lead.createdAt._seconds) {
+            fecha = new Date(lead.createdAt._seconds * 1000).toLocaleDateString('es-AR');
+        } else if (lead.createdAt) {
+            fecha = new Date(lead.createdAt).toLocaleDateString('es-AR');
+        }
+        
+        let nombre = (lead.name || lead.nombre || '').replace(/,/g, " ");
+        let email = (lead.email || '').replace(/,/g, " ");
+        let tel = (lead.phone || lead.telefono || '').replace(/,/g, " ");
+        let msg = (lead.message || lead.mensaje || '').replace(/,/g, " ").replace(/\n/g, " ");
+
+        csvContent += `${fecha},${nombre},${email},${tel},${msg}\n`;
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "moremkt_leads.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});

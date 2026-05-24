@@ -37,6 +37,10 @@
                     <span class="icon">💰</span>
                     <span>Precios</span>
                 </a>
+                <a href="#" class="nav-item" data-section="leads">
+                    <span class="icon">👥</span>
+                    <span>Leads</span>
+                </a>
             </nav>
 
             <div class="sidebar-footer">
@@ -324,6 +328,40 @@
 
                         <button type="submit" class="btn btn-primary" id="btn-save-pricing">Guardar Precios</button>
                     </form>
+                </div>
+            </section>
+
+            <!-- Sección: Leads -->
+            <section id="section-leads" class="section">
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h1>Leads de Diagnóstico</h1>
+                        <p>Gestión de prospectos del formulario principal</p>
+                    </div>
+                    <button class="btn btn-primary" id="btn-export-csv" style="background: #10B981;">Descargar CSV</button>
+                </div>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table id="leads-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Teléfono</th>
+                                    <th>Mensaje</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leads-tbody">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: var(--text-secondary);">
+                                        Cargando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
         </main>
