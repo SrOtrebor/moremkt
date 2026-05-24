@@ -254,6 +254,22 @@ app.post("/admin/login", loginLimiter, async (req, res) => {
 });
 
 // ============================================
+// PUBLIC: ENDPOINTS PÚBLICOS DE CONFIGURACIÓN
+// ============================================
+app.get("/pricing", async (req, res) => {
+    try {
+        const pricingDoc = await db.collection("pricing_config").doc("default").get();
+        if (pricingDoc.exists) {
+            return res.status(200).json(pricingDoc.data());
+        }
+        return res.status(200).json({ individual: 70000, ventas_ya: 350000 });
+    } catch (error) {
+        console.error("[GET /pricing] Error:", error);
+        return res.status(500).json({ error: "Error interno" });
+    }
+});
+
+// ============================================
 // ADMIN: CONFIGURACIÓN Y HORARIOS (PROTEGIDOS)
 // ============================================
 app.get("/admin/config", requireAuth, async (req, res) => {
@@ -295,15 +311,20 @@ app.put("/admin/config/availability", requireAuth, async (req, res) => {
 
 app.put("/admin/config/pricing", requireAuth, async (req, res) => {
     try {
-        const { individual } = req.body;
+        const { individual, ventas_ya } = req.body;
         if (typeof individual !== "number" || individual < 0 || individual > 10000000) {
-            return res.status(400).json({ error: "Precio inválido" });
+            return res.status(400).json({ error: "Precio individual inválido" });
         }
-        await db.collection("pricing_config").doc("default").set({
+        const dataToUpdate = {
             individual,
             currency: "ARS",
             updatedAt: admin.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
+        };
+        if (typeof ventas_ya === "number" && ventas_ya >= 0 && ventas_ya <= 10000000) {
+            dataToUpdate.ventas_ya = ventas_ya;
+        }
+
+        await db.collection("pricing_config").doc("default").set(dataToUpdate, { merge: true });
         return res.status(200).json({ success: true });
     } catch (error) {
         console.error("[admin/config/pricing] Error interno.");
