@@ -2,20 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
-  <!-- Página principal del sitio -->
+  <!-- Página principal — SPA completo de servicios, asesoría, capacitación y sobre mí -->
   <url>
     <loc>https://morehdmkt.com/</loc>
-    <lastmod>2026-05-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- SPA de servicios — página más importante -->
-  <url>
-    <loc>https://morehdmkt.com/construccion/</loc>
-    <lastmod>2026-05-23</lastmod>
+    <lastmod>2026-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <!-- Panel de administración — indexadores bloqueados en robots.txt -->
+  <!-- /admin/ está bloqueado para bots, no se incluye en el sitemap -->
 
 </urlset>

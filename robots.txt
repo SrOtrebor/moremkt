@@ -4,16 +4,26 @@ User-agent: *
 Disallow: /admin/
 Disallow: /admin
 
-# Bloquear archivos internos
+# Bloquear archivos y carpetas internas / de desarrollo
 Disallow: /functions/
+Disallow: /construccion/
 Disallow: /.firebaserc
 Disallow: /firebase.json
 Disallow: /firestore.rules
+Disallow: /git_status_output.txt
 
-# Permitir el frontend público
-Allow: /construccion/
+# Crawlers de IA (AI Search — permitir contenido útil)
+User-agent: GPTBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
 Allow: /
 
 # Sitemap — para Google y crawlers de IA
 Sitemap: https://morehdmkt.com/sitemap.xml
-
