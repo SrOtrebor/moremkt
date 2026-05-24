@@ -370,10 +370,16 @@ async function loadLeads() {
 
         tbody.innerHTML = leads.map(lead => {
             let fecha = 'N/A';
-            if (lead.createdAt && lead.createdAt._seconds) {
-                fecha = formatDate(new Date(lead.createdAt._seconds * 1000).toISOString().split('T')[0]);
-            } else if (lead.createdAt) {
-                fecha = formatDate(new Date(lead.createdAt).toISOString().split('T')[0]);
+            try {
+                if (lead.createdAt && lead.createdAt._seconds) {
+                    fecha = new Date(lead.createdAt._seconds * 1000).toLocaleDateString('es-AR');
+                } else if (lead.createdAt && typeof lead.createdAt === 'string') {
+                    fecha = new Date(lead.createdAt).toLocaleDateString('es-AR');
+                } else if (lead.createdAt && typeof lead.createdAt.toDate === 'function') {
+                    fecha = lead.createdAt.toDate().toLocaleDateString('es-AR');
+                }
+            } catch(e) {
+                console.warn('Error parsing date for lead', lead);
             }
             
             return `
