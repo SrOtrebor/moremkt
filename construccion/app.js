@@ -21,9 +21,16 @@ tabBtns.forEach(btn => {
     btn.classList.add('active');
     document.getElementById(targetId).classList.add('active');
     
-    // 3. Cambiar color del Hero Background
-    if (heroBg && bgColor) {
-      heroBg.style.background = bgColor;
+    // 3. Cambiar color y altura del Hero Background
+    if (heroBg) {
+      if (bgColor) {
+        heroBg.style.background = bgColor;
+      }
+      if (targetId === 'sobre-mi') {
+        heroBg.style.height = '1000px';
+      } else {
+        heroBg.style.height = '850px';
+      }
     }
   });
 });
