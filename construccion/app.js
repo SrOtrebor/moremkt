@@ -116,6 +116,11 @@ async function fetchPricing() {
                 btnMentoria.innerHTML = `Agendar Mentoría ($${data.mentoria.toLocaleString('es-AR')})`;
                 btnMentoria.setAttribute('onclick', `openModal('capacitacion', 'Mentoría 1:1', '$${data.mentoria.toLocaleString('es-AR')} ARS')`);
             }
+            
+            // Actualizar Pop-up de detalles "Ventas Ya"
+            if (typeof packDetails !== 'undefined' && packDetails['ventas-ya']) {
+                packDetails['ventas-ya'].price = `$${data.ventas_ya.toLocaleString('es-AR')} ARS / mes`;
+            }
         }
     } catch (e) {
         console.warn('Error al obtener precios dinámicos', e);
