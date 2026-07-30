@@ -5,6 +5,13 @@
 
 ---
 
+## 🆕 Últimas Actualizaciones (29 Jul 2026)
+
+- **Fotografías actualizadas:** Se reemplazaron las ilustraciones de las distintas secciones (Publicidad, Asesorías, Capacitación, Soluciones) y la foto de perfil (Sobre mí) por fotografías reales extraídas de la carpeta `Fotos/fotos paginas/`.
+- **Ajuste de diseño en 'Sobre mí':** Se amplió el contenedor de la foto de perfil (eliminando el recorte cuadrado fijo) para permitir que la imagen mantenga sus proporciones originales, limitando el ancho máximo a 450px para garantizar su correcta visualización en todos los dispositivos.
+
+---
+
 ## 🌐 URLs en Producción
 
 | Recurso | URL |
